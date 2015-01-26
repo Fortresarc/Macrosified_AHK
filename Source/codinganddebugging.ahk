@@ -8,6 +8,7 @@
 ;
 VSOpenCurrentFileInNotepadPlusPlus()
 {
+	global VisualStudioTitle
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow("Open in Notepad`+`+")
@@ -116,6 +117,7 @@ Reverse()
 ;
 VSFindAll_Entire()
 {
+	global VisualStudioTitle
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow("Find all `(Entire`)")
@@ -142,6 +144,7 @@ VSFindAll_Entire()
 ;
 VSFindAll_Current()
 {
+	global VisualStudioTitle
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow("Find all `(Current`)")
@@ -168,6 +171,7 @@ VSFindAll_Current()
 ;
 VSGoToDefinition()
 {
+	global VisualStudioTitle
 	functionChar := "`:`:"
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
@@ -218,6 +222,7 @@ VSGoToDefinition()
 ; 
 VSContinue_PressedAndHold()
 {
+	global VisualStudioTitle
 	; while ( GetKeyState("Alt", "P") && GetKeyState("LButton", "P") )
 	; {
 		;ToolTip, Run/ Continue
@@ -233,6 +238,7 @@ VSContinue_PressedAndHold()
 
 VSContinue_Released()
 {
+	global VisualStudioTitle
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		Send, {F5 Up}
@@ -244,6 +250,7 @@ VSContinue_Released()
 ; 
 VSStepOut()
 {
+	global VisualStudioTitle
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow( "Step out" )
@@ -258,6 +265,7 @@ VSStepOut()
 ; 
 VSStepOver()
 {
+	global VisualStudioTitle
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow( "Step Over" )
@@ -272,6 +280,7 @@ VSStepOver()
 ; 
 VSStepInto()
 {
+	global VisualStudioTitle
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow( "Step In" )
@@ -286,6 +295,7 @@ VSStepInto()
 ; 
 VSWatchInWindow1()
 {
+	global VisualStudioTitle
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		While GetKeyState("Alt", "P") && GetKeyState("w", "P")
@@ -316,6 +326,7 @@ VSWatchInWindow1()
 ;
 VSStopAndRun()
 {
+	global VisualStudioTitle
 	if( CheckWindowActive( VisualStudioTitle ) )
 	{
 		SetTitleMatchMode 2
@@ -364,6 +375,7 @@ VSStopAndRun()
 ;
 VSStopAndBuild()
 {
+	global VisualStudioTitle
 	if( CheckWindowActive( VisualStudioTitle ) )
 	{
 		SetTitleMatchMode 2

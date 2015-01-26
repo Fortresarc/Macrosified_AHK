@@ -158,6 +158,7 @@
             Send {LCtrl Down}{c}{LCtrl Up}
         }
     }
+    return
 }
 
 ;------------------------------
@@ -176,6 +177,7 @@
 			Send {LCtrl Down}{d}{LCtrl Up}
 		}
 	}
+    return
 }
 
 ;------------------------------
@@ -194,6 +196,7 @@
             Send {LControl Down}{n}{LControl Up}
         }
     }
+    return
 }
 ;------------------------------
 ;	Control ... s      
@@ -256,6 +259,7 @@
 		}
 	}
 	VSContinue_Released()
+    return
 }
 
 ;------------------------------
@@ -268,6 +272,7 @@
 		OutputToDebugWindow( "Alt RButton" )
 		Send, {Alt Down}{RButton}{Alt Up}
 	}
+    return
 }
 
 ;------------------------------
@@ -280,6 +285,7 @@
 		OutputToDebugWindow( "Alt WheelDown" )
 		Send, {Alt Down}{WheelDown}{Alt Up}
 	}
+    return
 }
 
 ;------------------------------
@@ -299,6 +305,7 @@
 		; }
 		; Send, {Alt Up}{MButton Up}
 	}
+    return
 }
 
 ;------------------------------
@@ -323,6 +330,7 @@
 		; Return usual command
 		Send {LAlt Down}{b}{LAlt Up}
 	}
+    return
 }
 
 ;------------------------------
@@ -335,6 +343,7 @@
 		; Return usual command
 		Send {LAlt Down}{c}{LAlt Up}
 	}
+    return
 }
 
 ;------------------------------
@@ -347,6 +356,7 @@
 		; Return usual command
 		Send {LAlt Down}{d}{LAlt Up}
 	}
+    return
 }
 
 ;------------------------------
@@ -359,6 +369,7 @@
 		; Return usual command
 		Send {LAlt Down}{e}{LAlt Up}
 	}
+    return
 }
 
 
@@ -372,6 +383,7 @@
 		; Return usual command
 		Send {LAlt Down}{r}{LAlt Up}
 	}
+    return
 }
 
 ;------------------------------
@@ -384,6 +396,7 @@
 		; Return usual command
 		Send {LAlt Down}{w}{LAlt Up}
 	}
+    return
 }
 
 ;------------------------------
