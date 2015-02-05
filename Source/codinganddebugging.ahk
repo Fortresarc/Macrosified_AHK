@@ -119,6 +119,7 @@ Reverse()
 VSFindAll_Entire()
 {
 	global VisualStudioTitle
+    global NotepadPlusPlusTitle
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow("Find all `(Entire`)")
@@ -137,6 +138,30 @@ VSFindAll_Entire()
 		;Send, {Enter}
 		return true
 	}
+    else if (CheckWindowActive( NotepadPlusPlusTitle )) 
+    {
+		OutputToDebugWindow("Find all `(Entire`) Notepad++")
+		Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
+		Sleep 50
+        
+        ; send focus back to "Follow current doc." directory
+        ; NOTE: If already selected it will still work
+		Loop 5
+		{
+			Sleep 50
+			Send {Tab}
+		}
+        Send, {Space}
+        
+        ; Search sub folders too
+        ; NOTE: If already selected it MAY NOT work
+        Send, {Tab}
+        Send, {Space}
+        Send, {Enter}
+        
+        return true
+    }
+    
 	return false
 }
 
@@ -146,6 +171,7 @@ VSFindAll_Entire()
 VSFindAll_Current()
 {
 	global VisualStudioTitle
+    global NotepadPlusPlusTitle
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow("Find all `(Current`)")
@@ -165,6 +191,22 @@ VSFindAll_Current()
 		;Send, {Enter}
 		return true
 	}
+    else if (CheckWindowActive( NotepadPlusPlusTitle )) 
+    {
+		OutputToDebugWindow("Find all `(Current`) Notepad++")
+		Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
+		Sleep 50
+        
+        ; send focus back to "Follow current doc." directory
+		Loop 5
+		{
+			Sleep 50
+			Send {Tab}
+		}
+        Send, {Space}   ; Checks the checkbox
+        Send, {Enter}
+        return true
+    }
 	return false
 }
 
