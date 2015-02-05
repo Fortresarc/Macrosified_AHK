@@ -129,7 +129,7 @@ VSFindAll_Entire()
 		Send, Entire Solution
 		
 		; send focus back to search field
-		Loop 9
+		Loop 11
 		{
 			Sleep 50
 			Send {Tab}
@@ -152,11 +152,12 @@ VSFindAll_Current()
 		Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
 		Sleep 50
 		Send, {Tab}
-		Sleep 100
+		Sleep 50
 		Send, Current Document
 
+        ; Is one less than "Entire" because in current "Look at these file types" field is disabled
 		; send focus back to search field
-		Loop 8
+		Loop 10
 		{
 			Sleep 50
 			Send {Tab}
