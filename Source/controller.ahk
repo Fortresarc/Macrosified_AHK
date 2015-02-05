@@ -1,5 +1,7 @@
 #Include windowsoperations.ahk
 #Include codinganddebugging.ahk
+#Include controllerspecific.ahk
+
 ;------------------------------
 ;	Control ... RButton
 ;
@@ -366,8 +368,11 @@
 {
 	if( VSFindAll_Entire() == false)
 	{
-		; Return usual command
-		Send {LAlt Down}{e}{LAlt Up}
+        if( AltE() == false )
+        {
+            ; Return usual command
+            Send {LAlt Down}{e}{LAlt Up}
+        }
 	}
     return
 }
