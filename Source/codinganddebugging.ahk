@@ -9,6 +9,7 @@
 VSOpenCurrentFileInNotepadPlusPlus()
 {
 	global VisualStudioTitle
+    global NotepadPlusPlusTitle
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow("Open in Notepad`+`+")
