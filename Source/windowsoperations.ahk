@@ -198,7 +198,7 @@ ResizeToLeftHalf()
         CoordMode, Mouse, Screen	; This will set mouse move to use coordinates relative to screen and NOT active window
         MouseGetPos, absoluteX, absoluteY, WhichWindow
         OutputToDebugWindow( absoluteX )
-        Sleep 100
+        Sleep 20
         
         if( absoluteX > A_ScreenWidth )
         {
@@ -227,7 +227,7 @@ ResizeToRightHalf()
         CoordMode, Mouse, Screen	; This will set mouse move to use coordinates relative to screen and NOT active window
         MouseGetPos, absoluteX, absoluteY, WhichWindow
         OutputToDebugWindow( absoluteX )
-        Sleep 100
+        Sleep 20
         
         ; Check if mouse is on left monitor
         if( absoluteX > A_ScreenWidth )
