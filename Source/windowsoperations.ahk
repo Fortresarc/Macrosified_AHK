@@ -223,11 +223,13 @@ ExitCurrentTab()
 		Click
 		Sleep 20
 		Send {Ctrl Down}{F4}{Ctrl Up}
+        return true
 	}
 	else if ( CheckWindowActive( NotepadPlusPlusTitle) )
 	{
 		OutputToDebugWindow( "Closing Tab" )
 		Send {Ctrl Down}{w}{Ctrl Up}
+        return true
 	}
+    return false
 }
-return

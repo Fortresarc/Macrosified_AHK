@@ -19,14 +19,16 @@
 		; LControl RButton
 		else
 		{
-			; TODO we should do it for certain apps only
-			ExitCurrentTab()
+			if( ExitCurrentTab() == false )
+            {
+                if( CtrlRB() == false )
+                {
+                    Send ^RButton
+                }
+            }
 		}
 	}
-	else
-	{
-		Send ^RButton
-	}
+	
 	return
 }
 
