@@ -1,6 +1,5 @@
 ; Should include your specific functions/ operations source file here
 ;#Include jobspecificoperations.ahk
-#Include jobspecificoperations.ahk
 
 ;------------------------------
 ;	Alt ... e
@@ -20,3 +19,20 @@ CtrlRB()
 {
     return false
 }
+
+;------------------------------
+;	Ctrl ... WheelUp
+;
+CtrlShiftWheelUp()
+{
+    return false
+}
+
+;------------------------------
+;	Ctrl ... WheelUp
+;
+CtrlShiftWheelDown()
+{
+    return false
+}
+

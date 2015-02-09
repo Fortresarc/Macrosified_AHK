@@ -75,7 +75,14 @@
 		; LControl Shift WheelUp
         else if( GetKeyState("LShift", "P") )
         {
-            Reverse()
+            if( Reverse() == false )
+            {
+                if( CtrlShiftWheelUp() == false )
+                {
+                    Send {Ctrl Down}{Shift Down}{WheelUp}{Shift Up}{Ctrl Up}
+                }
+            }
+            
         }
 		;-----------------------
 		; LControl WheelUp
@@ -101,10 +108,16 @@
 			Minimize()
 		}
         ;-----------------------
-		; LControl Shift WheelUp
+		; LControl Shift WheelDown
         else if( GetKeyState("LShift", "P") )
         {
-            Forward()
+            if( Forward() == false )
+            {
+                if( CtrlShiftWheelDown() == false )
+                {
+                    Send {Ctrl Down}{Shift Down}{WheelDown}{Shift Up}{Ctrl Up}
+                }
+            }
         }
 		;-----------------------
 		; LControl WheelDown
