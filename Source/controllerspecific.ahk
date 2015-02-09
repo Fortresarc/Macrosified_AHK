@@ -37,6 +37,22 @@ CtrlShiftWheelDown()
 }
 
 ;------------------------------
+;	Alt ... LButton
+;
+AltLButton()
+{
+    return false
+}
+
+;------------------------------
+;	Alt ... RButton
+;
+AltRButton()
+{
+    return false
+}
+
+;------------------------------
 ;	Alt ... WheelDown
 ;
 AltWheelDown()

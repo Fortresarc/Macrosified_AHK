@@ -13,6 +13,10 @@ Init()
 	global NotepadPlusPlusTitle 		:= "Notepad`+`+"
 	global DebugWindowTitle 			:= "DebugMYGUI"
     global AutoHotKeyTitle              := "AutoHotkey"
+    
+    ; Exe
+    global GoogleChromeExe              := "chrome.exe"
+    global NotepadPlusPlusExe           := "notepad`+`+.exe"
 
 	; Scroll speeds of various programs
 	global VisualStudio_ScrollRate := 10

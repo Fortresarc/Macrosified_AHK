@@ -11,6 +11,57 @@
 ;***************************************************************/
 ;	Normal Window Operation
 ;**************************************************************/
+ActivateLastNotepadPlusPlus()
+{
+    SetTitleMatchMode 2
+    IfWinExist, ahk_class Notepad++
+    {
+        OutputToDebugWindow("Existing Notepad'+'+")
+        WinActivate, ahk_class Notepad++
+    }
+    else
+    {
+        OutputToDebugWindow("New Notepad'+'+")
+        global NotepadPlusPlusExe
+        run % NotepadPlusPlusExe
+    }
+    return true
+}
+
+ActivateLastGoogleChrome()
+{
+    IfWinExist, ahk_class Chrome_WidgetWin_1
+    {
+        OutputToDebugWindow("Existing Chrome")
+        WinActivate, ahk_class Chrome_WidgetWin_1
+        return true
+    }
+    else
+    {
+        OutputToDebugWindow("New Chrome")
+        global GoogleChromeExe
+        SetTitleMatchMode 2
+        run % GoogleChromeExe
+    }
+    return true
+}
+
+;------------------------------
+;	Activate last Windows explorer
+;
+ActivateLastWindowsExplorer()
+{
+    ifWinExist ahk_class CabinetWClass
+    {
+        OutputToDebugWindow("Existing Windows Explorer")
+        Winactivate, ahk_class CabinetWClass
+    }
+    else
+    {
+        Send {LWin Down}{e}{LWin Up}
+    }
+    return true
+}
 
 ;------------------------------
 ;	Forward History of Windows Tab
@@ -21,7 +72,6 @@ Forward_WindowsTab()
     Send {Alt Down}{Shift Down}{Esc}{Alt Up}{Shift Up}
     return true
 }
-
 
 ;------------------------------
 ;	Reverse History of Windows Tab

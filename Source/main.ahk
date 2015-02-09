@@ -8,7 +8,7 @@
 
 #Include controller.ahk			; All macros are here
 
-#Include %A_ScriptDir%\thread\thread.ahk	; NOT USED NOW
+;#Include %A_ScriptDir%\thread\thread.ahk	; NOT USED NOW
 
 ;#z::Run www.autohotkey.com
 
@@ -33,13 +33,13 @@ return
 ; Test thread
 ;
 ; Detection
-^!k::
-CreateThread()
-return
+; ^!k::
+; CreateThread()
+; return
 
 ; End Detection
-^!l::
-ExitThread()
+; ^!l::
+; ExitThread()
 return
 
 

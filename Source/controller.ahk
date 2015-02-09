@@ -11,14 +11,6 @@
 ;	Windows , (use this button for this key <)
 ;   Precedes Ctrl key
 ;
-#n::
-{
-    if( ( GetKeyState("LWin", "P") || GetKeyState("RWin", "P") ) && GetKeyState("n") )
-    {
-        OpenNotepadPlusPlus()
-    }    
-    return
-}
 ;------------------------------
 ;	Windows ... WheelUp
 ;
@@ -28,7 +20,7 @@
     {
         if( GetKeyState("Ctrl", "P") )
             LControlWheelUp()
-        else if( Forward_WindowsTab() == false )
+        else if( Maximize() == false )
         {
             OutputToDebugWindow("Win WheelUp")
             Send {Win Down}{WheelUp}{Win Up}
@@ -46,11 +38,71 @@
     {
         if( GetKeyState("Ctrl", "P") )
             LControlWheelDown()
-        else if( Reverse_WindowsTab() == false )
+        else if( Minimize() == false )
         {
             OutputToDebugWindow("Win WheelDown")
             Send {Win Down}{WheelDown}{Win Up}
         }
+    }
+    return
+}
+
+;------------------------------
+;	Windows ... RButton
+;
+~LWin & RButton::
+{
+	if( GetKeyState("LWin", "P") && GetKeyState("RButton", "P") )
+	{
+        ResizeToRightHalf()
+    }
+    return
+}
+
+;------------------------------
+;	Windows ... n
+;
+~LWin & n::
+{
+	if( GetKeyState("LWin", "P") && GetKeyState("n", "P") )
+	{
+        ActivateLastNotepadPlusPlus()
+    }
+    return
+}
+
+;------------------------------
+;	Windows ... e
+;
+~LWin & e::
+{
+	if( GetKeyState("LWin", "P") && GetKeyState("e", "P") )
+	{
+        ActivateLastWindowsExplorer()
+    }
+    return
+}
+
+;------------------------------
+;	Windows ... c
+;
+~LWin & c::
+{
+	if( GetKeyState("LWin", "P") && GetKeyState("c", "P") )
+	{
+        ActivateLastGoogleChrome()
+    }
+    return
+}
+
+;------------------------------
+;	Windows ... LButton
+;
+~LWin & LButton::
+{
+	if( GetKeyState("LWin", "P") && GetKeyState("LButton", "P") )
+	{
+        ResizeToLeftHalf()
     }
     return
 }
@@ -65,13 +117,14 @@
 	{
 		;-----------------------
 		; Lcontrol Window RButton
-		if( GetKeyState("LWin", "P") )
-		{
-			ResizeToRightHalf()
-		}
-		;-----------------------
+		; if( GetKeyState("LWin", "P") )
+		; {
+			; ResizeToRightHalf()
+		; }
+		
+        ;-----------------------
 		; LControl RButton
-		else
+		;else
 		{
 			if( ExitCurrentTab() == false )
             {
@@ -96,13 +149,14 @@
 	{
 		;-----------------------
 		; Lcontrol Window LButton
-		if( GetKeyState("LWin", "P") )
-		{
-			ResizeToLeftHalf()
-		}
-		;-----------------------
+		; if( GetKeyState("LWin", "P") )
+		; {
+			; ResizeToLeftHalf()
+		; }
+		
+        ;-----------------------
 		; LControl LButton
-		else
+		;else
 		{
 			OutputToDebugWindow( "Ctrl LButton" )
 			
@@ -118,10 +172,9 @@
 ;
 ~LControl & WheelUp::
 {
-	LControlWheelUp()
-	return
+    LControlWheelUp()
+    return
 }
-
 LControlWheelUp()
 {
 	if( GetKeyState("Ctrl", "P") && GetKeyState("WheelUp", "P") )
@@ -130,7 +183,7 @@ LControlWheelUp()
 		; Lcontrol Window WheelUp
 		if( GetKeyState("LWin", "P") )
 		{
-			Maximize()
+			Reverse_WindowsTab()
 		}
 		;-----------------------
 		; LControl Shift WheelUp
@@ -162,10 +215,9 @@ LControlWheelUp()
 ;
 ~LControl & WheelDown::
 {
-	LControlWheelDown()
-	return
+    LControlWheelDown()
+    return
 }
-
 LControlWheelDown()
 {
 	if( GetKeyState("Ctrl", "P") && GetKeyState("WheelDown", "P") )
@@ -174,7 +226,7 @@ LControlWheelDown()
 		; Lcontrol Window WheelDown
 		if( GetKeyState("LWin", "P") )
 		{
-			Minimize()
+			Forward_WindowsTab()
 		}
         ;-----------------------
 		; LControl Shift WheelDown
