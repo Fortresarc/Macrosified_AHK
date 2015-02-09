@@ -36,3 +36,18 @@ CtrlShiftWheelDown()
     return false
 }
 
+;------------------------------
+;	Alt ... WheelDown
+;
+AltWheelDown()
+{
+    return false
+}
+
+;------------------------------
+;	Alt ... MButton
+;
+AltMButton()
+{
+    return false
+}

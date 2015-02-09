@@ -2,7 +2,61 @@
 #Include codinganddebugging.ahk
 #Include controllerspecific.ahk
 
+;======================================================================================================================
+; NOTE: 
+; Precedence order we currently tested and know: Windows, Ctrl
+;======================================================================================================================
+
+;======================================================================================================================
+;	Windows , (use this button for this key <)
+;   Precedes Ctrl key
+;
+#n::
+{
+    if( ( GetKeyState("LWin", "P") || GetKeyState("RWin", "P") ) && GetKeyState("n") )
+    {
+        OpenNotepadPlusPlus()
+    }    
+    return
+}
 ;------------------------------
+;	Windows ... WheelUp
+;
+~LWin & WheelUp::
+{
+    if( ( GetKeyState("LWin", "P") || GetKeyState("RWin", "P") ) && GetKeyState("WheelUp", "P") )
+    {
+        if( GetKeyState("Ctrl", "P") )
+            LControlWheelUp()
+        else if( Forward_WindowsTab() == false )
+        {
+            OutputToDebugWindow("Win WheelUp")
+            Send {Win Down}{WheelUp}{Win Up}
+        }
+    }
+    return
+}
+
+;------------------------------
+;	Windows ... WheelDown
+;
+~LWin & WheelDown::
+{
+    if( ( GetKeyState("LWin", "P") || GetKeyState("RWin", "P") ) && GetKeyState("WheelDown", "P") )
+    {
+        if( GetKeyState("Ctrl", "P") )
+            LControlWheelDown()
+        else if( Reverse_WindowsTab() == false )
+        {
+            OutputToDebugWindow("Win WheelDown")
+            Send {Win Down}{WheelDown}{Win Up}
+        }
+    }
+    return
+}
+
+;======================================================================================================================
+;	Control, (use this button for this key <)
 ;	Control ... RButton
 ;
 ~LControl & RButton::
@@ -64,6 +118,12 @@
 ;
 ~LControl & WheelUp::
 {
+	LControlWheelUp()
+	return
+}
+
+LControlWheelUp()
+{
 	if( GetKeyState("Ctrl", "P") && GetKeyState("WheelUp", "P") )
 	{
 		;-----------------------
@@ -101,6 +161,12 @@
 ;	Control ... WheelDown
 ;
 ~LControl & WheelDown::
+{
+	LControlWheelDown()
+	return
+}
+
+LControlWheelDown()
 {
 	if( GetKeyState("Ctrl", "P") && GetKeyState("WheelDown", "P") )
 	{
@@ -270,7 +336,7 @@
 	return
 }
 
-;------------------------------
+;======================================================================================================================
 ;	Alt , (use this button for this key <)
 ;
 ;------------------------------
@@ -484,7 +550,7 @@
     return
 }
 
-;------------------------------
+;======================================================================================================================
 ;	Shift , (use this button for this key <)
 ;
 +WheelUp::
@@ -505,14 +571,3 @@
 }
 
 
-;------------------------------
-;	Windows , (use this button for this key <)
-;
-#n::
-{
-    if( ( GetKeyState("LWin", "P") || GetKeyState("RWin", "P") ) && GetKeyState("n") )
-    {
-        OpenNotepadPlusPlus()
-    }    
-    return
-}

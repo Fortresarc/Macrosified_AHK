@@ -13,6 +13,27 @@
 ;**************************************************************/
 
 ;------------------------------
+;	Forward History of Windows Tab
+;
+Forward_WindowsTab()
+{
+    OutputToDebugWindow("Forward Windows")
+    Send {Alt Down}{Shift Down}{Esc}{Alt Up}{Shift Up}
+    return true
+}
+
+
+;------------------------------
+;	Reverse History of Windows Tab
+;
+Reverse_WindowsTab()
+{
+    OutputToDebugWindow("Reverse Windows")
+    Send {Alt Down}{Esc}{Alt Up}
+    return true
+}
+
+;------------------------------
 ;	Scroll faster
 ;
 FastScrollUp()
