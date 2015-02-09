@@ -67,23 +67,33 @@ Forward()
 	global VisualStudioTitle
 	global AraxisMergeTitle
     global GoogleChromeTitle
+    global NotepadPlusPlusTitle
     
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow("Forward history")
 		Send, {Ctrl Down}{-}{Ctrl Up}
+        return true
 	}
 	else if ( CheckWindowActive( AraxisMergeTitle )  )
 	{
 		OutputToDebugWindow("Next Diff")
 		Send, {F8}
+        return true
 	}
-    else        ;if ( CheckWindowActive( GoogleChromeTitle ) )
+    else if ( CheckWindowActive( GoogleChromeTitle ) )
     {
         OutputToDebugWindow("Next Tab")
         Send {Ctrl Down}{Tab}{Ctrl Up}
+        return true
     }
-	return
+    else if( CheckWindowActive( NotepadPlusPlusTitle ) )
+    {
+        OutputToDebugWindow("Prev Tab")
+        Send {Ctrl Down}{PgDn}{Ctrl Up}
+        return true
+    }
+	return false
 }
 
 ;------------------------------
@@ -94,23 +104,33 @@ Reverse()
 	global VisualStudioTitle
 	global AraxisMergeTitle
     global GoogleChromeTitle
+    global NotepadPlusPlusTitle
     
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow("Reverse history")
 		Send, {Ctrl Down}{Shift Down}{-}{Ctrl Up}{Shift Up}
+        return true
 	}
 	else if ( CheckWindowActive( AraxisMergeTitle ) )
 	{
 		OutputToDebugWindow("Prev Diff")
 		Send, {F7}
+        return true
 	}
-    else        ;if ( CheckWindowActive( GoogleChromeTitle ) )
+    else if ( CheckWindowActive( GoogleChromeTitle ) )
     {
         OutputToDebugWindow("Prev Tab")
         Send {Ctrl Down}{Shift Down}{Tab}{Ctrl Up}{Shift Up}
+        return true
     }
-	return
+    else if( CheckWindowActive( NotepadPlusPlusTitle ) )
+    {
+        OutputToDebugWindow("Prev Tab")
+        Send {Ctrl Down}{PgUp}{Ctrl Up}
+        return true
+    }
+	return false
 }
 
 ;------------------------------
@@ -219,7 +239,7 @@ VSGoToDefinition()
 	functionChar := "`:`:"
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
-		if( GetKeyState("Alt", "P") && GetKeyState("d", "P") )
+		;if( GetKeyState("Alt", "P") && GetKeyState("d", "P") )
 		{
 			; Select current word 
 			Click

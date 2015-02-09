@@ -7,7 +7,7 @@
 ;
 ~LControl & RButton::
 {
-	if( GetKeyState("LControl", "P") && GetKeyState("RButton", "P") )
+	if( GetKeyState("Ctrl", "P") && GetKeyState("RButton", "P") )
 	{
 		;-----------------------
 		; Lcontrol Window RButton
@@ -23,6 +23,7 @@
             {
                 if( CtrlRB() == false )
                 {
+                    OutputToDebugWindow("Control RButton")
                     Send ^RButton
                 }
             }
@@ -37,7 +38,7 @@
 ;
 ~LControl & LButton::
 {
-	if( GetKeyState("LControl", "P") && GetKeyState("LButton", "P") )
+	if( GetKeyState("Ctrl", "P") && GetKeyState("LButton", "P") )
 	{
 		;-----------------------
 		; Lcontrol Window LButton
@@ -52,7 +53,7 @@
 			OutputToDebugWindow( "Ctrl LButton" )
 			
 			; not used so default to Windows select multiple files
-			Send {LControl Down}{LButton}{LControl Up}
+			Send {Ctrl Down}{LButton}{Ctrl Up}
 		}
 	}
 	return
@@ -63,7 +64,7 @@
 ;
 ~LControl & WheelUp::
 {
-	if( GetKeyState("LControl", "P") && GetKeyState("WheelUp", "P") )
+	if( GetKeyState("Ctrl", "P") && GetKeyState("WheelUp", "P") )
 	{
 		;-----------------------
 		; Lcontrol Window WheelUp
@@ -79,6 +80,7 @@
             {
                 if( CtrlShiftWheelUp() == false )
                 {
+                    OutputToDebugWindow("Control Shift WheelUp")
                     Send {Ctrl Down}{Shift Down}{WheelUp}{Shift Up}{Ctrl Up}
                 }
             }
@@ -88,6 +90,7 @@
 		; LControl WheelUp
 		else
 		{
+            OutputToDebugWindow("Control WheelUp")
 			Send {Ctrl Down}{WheelUp}{Ctrl Up}
 		}
 	}
@@ -99,7 +102,7 @@
 ;
 ~LControl & WheelDown::
 {
-	if( GetKeyState("LControl", "P") && GetKeyState("WheelDown", "P") )
+	if( GetKeyState("Ctrl", "P") && GetKeyState("WheelDown", "P") )
 	{
 		;-----------------------
 		; Lcontrol Window WheelDown
@@ -115,6 +118,7 @@
             {
                 if( CtrlShiftWheelDown() == false )
                 {
+                    OutputToDebugWindow("LControl WheelDown")
                     Send {Ctrl Down}{Shift Down}{WheelDown}{Shift Up}{Ctrl Up}
                 }
             }
@@ -123,6 +127,7 @@
 		; LControl WheelDown
 		else
 		{
+            OutputToDebugWindow("Control WheelDown")
 			Send {Ctrl Down}{WheelDown}{Ctrl Up}
 		}
 	}
@@ -136,6 +141,7 @@
 {
 	if( ! VSOpenCurrentFileInNotepadPlusPlus() )
 	{
+        OutputToDebugWindow("LControl MButton")
 		Send {Ctrl Down}{MButton}{Ctrl Up}
 	}
 }
@@ -154,7 +160,7 @@
 ;
 ^+c::       ;Ctrl Shift c
 {
-    if( GetKeyState("LControl", "P") && GetKeyState("c", "P") )
+    if( GetKeyState("Ctrl", "P") && GetKeyState("c", "P") )
     {
         if( GetKeyState("Shift", "P") )
         {
@@ -172,7 +178,8 @@
         }
         else
         {
-            Send {LCtrl Down}{c}{LCtrl Up}
+            OutputToDebugWindow("Control c")
+            Send {Ctrl Down}{c}{Ctrl Up}
         }
     }
     return
@@ -183,7 +190,7 @@
 ;
 ^#d::
 {
-	if( GetKeyState("LControl", "P") && GetKeyState("d", "P") )
+	if( GetKeyState("Control", "P") && GetKeyState("d", "P") )
     {
         if( GetKeyState("LWin", "P") )
         {
@@ -191,7 +198,8 @@
 		}
 		else
 		{
-			Send {LCtrl Down}{d}{LCtrl Up}
+            OutputToDebugWindow("Control d")
+			Send {Ctrl Down}{d}{Ctrl Up}
 		}
 	}
     return
@@ -202,7 +210,7 @@
 ;
 ^+n::       ;Ctrl Shift 
 {
-    if( GetKeyState("LControl", "P") && GetKeyState("n", "P") )
+    if( GetKeyState("Ctrl", "P") && GetKeyState("n", "P") )
     {
         if( GetKeyState("Shift", "P") )
         {
@@ -210,7 +218,8 @@
         }
         else
         {
-            Send {LControl Down}{n}{LControl Up}
+            OutputToDebugWindow("Control n")
+            Send {Ctrl Down}{n}{Ctrl Up}
         }
     }
     return
@@ -220,7 +229,7 @@
 ;
 ~LControl & s::
 {
-	if( GetKeyState("LControl", "P") && GetKeyState("s", "P") )
+	if( GetKeyState("Ctrl", "P") && GetKeyState("s", "P") )
 	{
 		;-----------------------
 		; test if we can hide windows to taskbar
@@ -230,8 +239,9 @@
         }
         else
         {
+            OutputToDebugWindow("Control s")
             ; not used so default to Windows controls
-            Send {LControl Down}{s}{LControl Up}
+            Send {Ctrl Down}{s}{Ctrl Up}
         }
 	}
 	return
@@ -242,7 +252,7 @@
 ;
 ~LControl & t::
 {
-	if( GetKeyState("LControl", "P") && GetKeyState("t", "P") )
+	if( GetKeyState("Ctrl", "P") && GetKeyState("t", "P") )
 	{
 		;-----------------------
 		; test if we can hide windows to taskbar
@@ -252,8 +262,9 @@
         }
         else
         {
+            OutputToDebugWindow("Ctrl t")
             ; not used so default to Windows controls
-            Send {LControl Down}{t}{LControl Up}
+            Send {Ctrl Down}{t}{Ctrl Up}
         }
 	}
 	return
@@ -265,14 +276,20 @@
 ;------------------------------
 ;	Alt ... LButton
 ;
-!LButton::
+;!LButton::
+~Alt & LButton::
 {
 	while ( GetKeyState("Alt", "P") && GetKeyState("LButton", "P") )
 	{
 		if( VSContinue_PressedAndHold() == false )
 		{
-			; Return usual command
-			Send {LAlt Down}{LButton}{LAlt Up}
+            if( AltLButton() == false )
+            {
+                OutputToDebugWindow( "Alt LButton")
+			
+                ; Return usual command
+                Send {LAlt Down}{LButton}{LAlt Up}
+            }
 		}
 	}
 	VSContinue_Released()
@@ -282,46 +299,60 @@
 ;------------------------------
 ;	Alt ... RButton
 ;
-!RButton::
+;!RButton::
+~Alt & RButton::
 {
-	if( VSStepOut() == false )
+    if( GetKeyState("Alt", "P") && GetKeyState("WheelDown", "P") )
 	{
-		OutputToDebugWindow( "Alt RButton" )
-		Send, {Alt Down}{RButton}{Alt Up}
-	}
+        if( VSStepOut() == false )
+        {
+            if( AltRButton() == false )
+            {
+                OutputToDebugWindow( "Alt RButton" )
+                Send, {Alt Down}{RButton}{Alt Up}
+            }
+        }
+    }
     return
 }
 
 ;------------------------------
 ;	Alt ... WheelDown
 ;
-!WheelDown::
+;!WheelDown::
+~Alt & WheelDown::
 {
-	if( VSStepOver() == false )
+	if( GetKeyState("Alt", "P") && GetKeyState("WheelDown", "P") )
 	{
-		OutputToDebugWindow( "Alt WheelDown" )
-		Send, {Alt Down}{WheelDown}{Alt Up}
-	}
+        if( VSStepOver() == false )
+        {
+            if( AltWheelDown() == false )
+            {
+                OutputToDebugWindow( "Alt WheelDown" )
+                Send, {Alt Down}{WheelDown}{Alt Up}
+            }
+        }
+    }
     return
 }
 
 ;------------------------------
 ;	Alt ... MButton
 ;
-!MButton::
-{
-	if( VSStepInto() == false )
+;!MButton::
+~Alt & MButton::
+{    
+    if( GetKeyState("Alt", "P") && GetKeyState("MButton", "P") )
 	{
-		OutputToDebugWindow( "Alt WheelDown" )
-		Send, {Alt Down}{MButton}{Alt Up}
-		; OutputToDebugWindow( "Alt MButton" )
-		; Send, {Alt Down}{MButton Down}
-		; While GetKeyState("Alt", "P")
-		; {
-			; Send, {Alt Down}{MButton Down}
-		; }
-		; Send, {Alt Up}{MButton Up}
-	}
+        if( VSStepInto() == false )
+        {
+            if( AltMButton() == false )
+            {
+                OutputToDebugWindow( "Alt MButton" )
+                Send, {Alt Down}{MButton}{Alt Up}
+            }
+        }
+    }
     return
 }
 
@@ -329,66 +360,90 @@
 ;	Alt ... Space
 ~LAlt & Space::
 {
-	if( DockFloatingFileVisualStudio() == false)
+    if( GetKeyState("Alt", "P") && GetKeyState("Space", "P") )
 	{
-		; Return usual command
-		Send {LAlt Down}{Space}{LAlt Up}
-	}
+        if( DockFloatingFileVisualStudio() == false)
+        {
+            OutputToDebugWindow("Alt Space")
+            ; Return usual command
+            Send {Alt Down}{Space}{Alt Up}
+        }
+    }
 	return
 }
 
 ;------------------------------
 ;	Alt ... b
 ;
-!b::
+;!b::
+~Alt & b::
 {
-	if( VSStopAndBuild() == false)
+    if( GetKeyState("Alt", "P") && GetKeyState("b", "P") )
 	{
-		; Return usual command
-		Send {LAlt Down}{b}{LAlt Up}
-	}
+        if( VSStopAndBuild() == false)
+        {
+            OutputToDebugWindow("Alt b")
+            ; Return usual command
+            Send {Alt Down}{b}{Alt Up}
+        }
+    }
     return
 }
 
 ;------------------------------
 ;	Alt ... c
 ;
-!c::
+;!c::
+~Alt & c::
 {
-	if( VSFindAll_Current() == false)
+    if( GetKeyState("Alt", "P") && GetKeyState("c", "P") )
 	{
-		; Return usual command
-		Send {LAlt Down}{c}{LAlt Up}
-	}
+        if( VSFindAll_Current() == false)
+        {
+            OutputToDebugWindow("Alt c")
+            ; Return usual command
+            Send {Alt Down}{c}{Alt Up}
+        }
+    }
     return
 }
 
 ;------------------------------
 ;	Alt ... d
 ;
-!d::
+;!d::
+~Alt & d::
 {
-	if( VSGoToDefinition() == false)
+	if( GetKeyState("Alt", "P") && GetKeyState("d", "P") )
 	{
-		; Return usual command
-		Send {LAlt Down}{d}{LAlt Up}
-	}
+        if( VSGoToDefinition() == false)
+        {
+            OutputToDebugWindow("Alt d")
+            ; Return usual command
+            Send {Alt Down}{d}{Alt Up}
+        }
+    }
     return
 }
 
 ;------------------------------
 ;	Alt ... e
 ;
-!e::
+;!e::
+~Alt & e::
 {
-	if( VSFindAll_Entire() == false)
+	if( GetKeyState("Alt", "P") && GetKeyState("e", "P") )
 	{
-        if( AltE() == false )
+        if( VSFindAll_Entire() == false)
         {
-            ; Return usual command
-            Send {LAlt Down}{e}{LAlt Up}
+            if( AltE() == false )
+            {
+                OutputToDebugWindow("Alt e")
+                ; Return usual command
+                Send {Alt Down}{e}{Alt Up}
+            }
         }
-	}
+    }
     return
 }
 
@@ -396,26 +451,36 @@
 ;------------------------------
 ;	Alt ... r
 ;
-!r::
+;!r::
+~Alt & r::
 {
-	if( VSStopAndRun() == false)
+    if( GetKeyState("Alt", "P") && GetKeyState("r", "P") )
 	{
-		; Return usual command
-		Send {LAlt Down}{r}{LAlt Up}
-	}
+        if( VSStopAndRun() == false)
+        {
+            OutputToDebugWindow("Alt r")
+            ; Return usual command
+            Send {Alt Down}{r}{Alt Up}
+        }
+    }
     return
 }
 
 ;------------------------------
 ;	Alt ... w
 ;
-!w::
+;!w::
+~Alt & w::
 {
-	if( VSWatchInWindow1() == false )
+    if( GetKeyState("Alt", "P") && GetKeyState("w", "P") )
 	{
-		; Return usual command
-		Send {LAlt Down}{w}{LAlt Up}
-	}
+        if( VSWatchInWindow1() == false )
+        {
+            OutputToDebugWindow("Alt w")
+            ; Return usual command
+            Send {Alt Down}{w}{Alt Up}
+        }
+    }
     return
 }
 
