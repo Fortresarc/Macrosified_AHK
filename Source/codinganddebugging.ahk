@@ -202,7 +202,7 @@ VSFindAll_Current()
 		SendTextImmediately( "Current Document" )
 
 		; send focus back to search field
-		Loop 10
+		Loop 2
 		{
 			Sleep 50
             Send {Shift}{Tab}

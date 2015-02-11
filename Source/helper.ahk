@@ -18,10 +18,18 @@
 ;
 SendTextImmediately( text )
 {
+    originalCopiedText = 
+    originalCopiedText := clipboard
+    OutputToDebugWindow( originalCopiedText )
+    
     ClipWait, 2  ; Wait for the clipboard to contain text.
 	clipboard := text
 	Sleep 50
     SendInput {Ctrl Down}{v}{Ctrl Up}
+    Sleep 50
+    
+    ClipWait, 2
+    clipboard := originalCopiedText
 }
 
 ;------------------------------
