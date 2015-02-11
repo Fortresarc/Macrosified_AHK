@@ -147,14 +147,15 @@ VSFindAll_Entire()
 		Sleep 50
 		Send {Tab}
 		Sleep 50
-		Send, Entire Solution
+		SendInput, Entire Solution
 		
 		; send focus back to search field
-		Loop 11
+        Loop 2
 		{
-			Sleep 50
-			Send {Tab}
+			sleep 50
+            Send {Shift}{Tab}
 		}
+        
 		;Send, {Enter}
 		return true
 	}
@@ -177,7 +178,6 @@ VSFindAll_Entire()
         ; NOTE: If already selected it MAY NOT work
         Send, {Tab}
         Send, {Space}
-        Send, {Enter}
         
         return true
     }
@@ -199,15 +199,15 @@ VSFindAll_Current()
 		Sleep 50
 		Send, {Tab}
 		Sleep 50
-		Send, Current Document
+		SendInput, Current Document
 
-        ; Is one less than "Entire" because in current "Look at these file types" field is disabled
 		; send focus back to search field
 		Loop 10
 		{
 			Sleep 50
-			Send {Tab}
+            Send {Shift}{Tab}
 		}
+        
 		;Send, {Enter}
 		return true
 	}
@@ -224,7 +224,7 @@ VSFindAll_Current()
 			Send {Tab}
 		}
         Send, {Space}   ; Checks the checkbox
-        Send, {Enter}
+        
         return true
     }
 	return false
@@ -268,7 +268,7 @@ VSGoToDefinition()
 			Sleep 100
 
 			Send, {Tab}
-			Send, Entire Solution
+			SendInput, Entire Solution
 
 			ToolTip
 		}
