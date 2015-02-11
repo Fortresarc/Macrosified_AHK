@@ -14,6 +14,7 @@
 ;------------------------------
 ;	Windows ... WheelUp
 ;
+~RWin & WheelUp::
 ~LWin & WheelUp::
 {
     if( ( GetKeyState("LWin", "P") || GetKeyState("RWin", "P") ) && GetKeyState("WheelUp", "P") )
@@ -32,6 +33,7 @@
 ;------------------------------
 ;	Windows ... WheelDown
 ;
+~RWin & WheelDown::
 ~LWin & WheelDown::
 {
     if( ( GetKeyState("LWin", "P") || GetKeyState("RWin", "P") ) && GetKeyState("WheelDown", "P") )
@@ -50,9 +52,10 @@
 ;------------------------------
 ;	Windows ... RButton
 ;
+~RWin & RButton::
 ~LWin & RButton::
 {
-	if( GetKeyState("LWin", "P") && GetKeyState("RButton", "P") )
+	if( ( GetKeyState("LWin", "P") || GetKeyState("RWin", "P") ) && GetKeyState("RButton", "P") )
 	{
         ResizeToRightHalf()
     }
@@ -62,9 +65,10 @@
 ;------------------------------
 ;	Windows ... n
 ;
+~RWin & n::
 ~LWin & n::
 {
-	if( GetKeyState("LWin", "P") && GetKeyState("n", "P") )
+	if( ( GetKeyState("LWin", "P") || GetKeyState("RWin", "P") ) && GetKeyState("n", "P") )
 	{
         ActivateLastNotepadPlusPlus()
     }
@@ -74,9 +78,10 @@
 ;------------------------------
 ;	Windows ... e
 ;
+~RWin & e::
 ~LWin & e::
 {
-	if( GetKeyState("LWin", "P") && GetKeyState("e", "P") )
+	if( ( GetKeyState("LWin", "P") || GetKeyState("RWin", "P") ) && GetKeyState("e", "P") )
 	{
         ActivateLastWindowsExplorer()
     }
@@ -86,9 +91,10 @@
 ;------------------------------
 ;	Windows ... c
 ;
+~RWin & c::
 ~LWin & c::
 {
-	if( GetKeyState("LWin", "P") && GetKeyState("c", "P") )
+	if( ( GetKeyState("LWin", "P") || GetKeyState("RWin", "P") ) && GetKeyState("c", "P") )
 	{
         ActivateLastGoogleChrome()
     }
@@ -98,9 +104,10 @@
 ;------------------------------
 ;	Windows ... LButton
 ;
+~RWin & LButton::
 ~LWin & LButton::
 {
-	if( GetKeyState("LWin", "P") && GetKeyState("LButton", "P") )
+	if( ( GetKeyState("LWin", "P") || GetKeyState("RWin", "P") ) && GetKeyState("LButton", "P") )
 	{
         ResizeToLeftHalf()
     }
@@ -332,7 +339,7 @@ LControlWheelDown()
     {
         if( GetKeyState("Shift", "P") )
         {
-            OpenCurrentSelectedWithNotepadPlusPlus()
+            ;OpenCurrentSelectedWithNotepadPlusPlus()
         }
         else
         {

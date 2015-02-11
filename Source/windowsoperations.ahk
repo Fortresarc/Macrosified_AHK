@@ -13,6 +13,12 @@
 ;**************************************************************/
 ActivateLastNotepadPlusPlus()
 {
+    ifWinActive ahk_class CabinetWClass
+    {
+        OpenCurrentSelectedWithNotepadPlusPlus()
+        return true
+    }
+    
     SetTitleMatchMode 2
     IfWinExist, ahk_class Notepad++
     {
