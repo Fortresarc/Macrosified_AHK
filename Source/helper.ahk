@@ -18,6 +18,7 @@
 ;
 OpenNotepadPlusPlus(fileToOpen="")
 {
+    global NotepadPlusPlusTitle
 	NotepadPlusPlus_Dir := "C:\Program Files (x86)\Notepad++\notepad++.exe"
 
 	;Run, %NotepadPlusPlus_Dir%
@@ -26,6 +27,9 @@ OpenNotepadPlusPlus(fileToOpen="")
 	TimedToolTip( legalNotepadPlusPlus_Dir, 1000)
 
 	Run, %legalNotepadPlusPlus_Dir% %fileToOpen%
+    
+    if( CheckWindowActive( NotepadPlusPlusTitle ) )
+        WinActivate
 	return
 }
 
