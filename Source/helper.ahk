@@ -14,6 +14,17 @@
 ;
 
 ;------------------------------
+;	Send text in a flash without waiting for it to type out usually using Send, SendInput
+;
+SendTextImmediately( text )
+{
+    ClipWait, 2  ; Wait for the clipboard to contain text.
+	clipboard := text
+	Sleep 50
+    SendInput {Ctrl Down}{v}{Ctrl Up}
+}
+
+;------------------------------
 ;	Open Programs
 ;
 OpenNotepadPlusPlus(fileToOpen="")

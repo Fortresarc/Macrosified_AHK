@@ -70,7 +70,10 @@
 {
 	if( ( GetKeyState("LWin", "P") || GetKeyState("RWin", "P") ) && GetKeyState("n", "P") )
 	{
-        ActivateLastNotepadPlusPlus()
+        if( ! VSOpenCurrentFileInNotepadPlusPlus() )
+        {
+            ActivateLastNotepadPlusPlus()
+        }
     }
     return
 }
@@ -264,11 +267,8 @@ LControlWheelDown()
 ;
 ~Lcontrol & MButton::
 {
-	if( ! VSOpenCurrentFileInNotepadPlusPlus() )
-	{
-        OutputToDebugWindow("LControl MButton")
-		Send {Ctrl Down}{MButton}{Ctrl Up}
-	}
+	 Send {Ctrl Down}{MButton}{Ctrl Up}
+    return
 }
 
 ;------------------------------

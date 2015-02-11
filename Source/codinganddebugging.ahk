@@ -10,22 +10,24 @@ VSOpenCurrentFileInNotepadPlusPlus()
 {
 	global VisualStudioTitle
     global NotepadPlusPlusTitle
+    pauseInterval = 200
+    pauseIntervalLong = 800
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow("Open in Notepad`+`+")
 		; Copy current line first
 		copiedLine := CopyWholeLine()
-		Sleep 300
+		Sleep pauseInterval
 
 		clipboard = asdf
 		clipboard =  ; Start off empty to allow ClipWait to detect when the text has arrived.
 
 		Send, {Alt Down}{-}{Alt Up}
-		Sleep 300
+		Sleep pauseInterval
 		Send, f
-		Sleep 300
+		Sleep pauseInterval
 		Send {Enter}
-		Sleep 300
+		Sleep pauseInterval
 	;	Send, {Enter}
 
 		ClipWait, 2  ; Wait for the clipboard to contain text.
@@ -34,24 +36,23 @@ VSOpenCurrentFileInNotepadPlusPlus()
 		
 		TimedToolTip( clipboard2, 1000 )
 
-		Sleep 800
+		Sleep pauseInterval
 
 		OpenNotepadPlusPlus(clipboard2)
 
-		Sleep 1500
+		Sleep pauseIntervalLong
 
 		if ( CheckWindowExist( NotepadPlusPlusTitle ) )
 		{
 			WinActivate
-			Sleep 300
+			Sleep pauseInterval
 			
 			; Find the line
 			Send ^f
-			Sleep 100
-			Send %copiedLine%
-			Sleep 600
+			Sleep pauseInterval
+            SendTextImmediately( copiedLine )
 			Send ^{Enter}
-			Sleep 600
+			Sleep pauseInterval
 			Send {Esc}
 		}
 		return true
@@ -145,9 +146,8 @@ VSFindAll_Entire()
 		OutputToDebugWindow("Find all `(Entire`)")
 		Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
 		Sleep 50
-		Send {Tab}
-		Sleep 50
-		SendInput, Entire Solution
+		Send {Tab}        
+        SendTextImmediately( "Entire Solution" )
 		
 		; send focus back to search field
         Loop 2
@@ -199,7 +199,7 @@ VSFindAll_Current()
 		Sleep 50
 		Send, {Tab}
 		Sleep 50
-		SendInput, Current Document
+		SendTextImmediately( "Current Document" )
 
 		; send focus back to search field
 		Loop 10
@@ -237,6 +237,7 @@ VSGoToDefinition()
 {
 	global VisualStudioTitle
 	functionChar := "`:`:"
+    waitInterval = 300
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		;if( GetKeyState("Alt", "P") && GetKeyState("d", "P") )
@@ -248,10 +249,8 @@ VSGoToDefinition()
 			OutputToDebugWindow( "Go to Definition" )
 			; Find all in entire solution
 			Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
-			Sleep 900	;This is the optimal time to wait for Find all window
+			Sleep waitInterval	;This is the optimal time to wait for Find all window
 
-		
-			Sleep 100
 			clipboard = asdf
 			clipboard =  ; Start off empty to allow ClipWait to detect when the text has arrived.
 			Send ^c
@@ -264,11 +263,10 @@ VSGoToDefinition()
 
 		
 			newStr := functionChar . clipboard2
-			Send, %newStr%
-			Sleep 100
+            SendTextImmediately( newStr )
 
 			Send, {Tab}
-			SendInput, Entire Solution
+			SendTextImmediately( "Entire Solution" )
 
 			ToolTip
 		}
