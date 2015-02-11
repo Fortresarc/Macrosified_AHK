@@ -73,7 +73,7 @@ Forward()
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow("Forward history")
-		Send, {Ctrl Down}{-}{Ctrl Up}
+		Send, {Ctrl Down}{Shift Down}{-}{Ctrl Up}{Shift Up}
         return true
 	}
 	else if ( CheckWindowActive( AraxisMergeTitle )  )
@@ -110,7 +110,7 @@ Reverse()
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow("Reverse history")
-		Send, {Ctrl Down}{Shift Down}{-}{Ctrl Up}{Shift Up}
+		Send, {Ctrl Down}{-}{Ctrl Up}
         return true
 	}
 	else if ( CheckWindowActive( AraxisMergeTitle ) )
