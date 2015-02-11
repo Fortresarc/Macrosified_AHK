@@ -150,10 +150,10 @@ VSFindAll_Entire()
         SendTextImmediately( "Entire Solution" )
 		
 		; send focus back to search field
-        Loop 2
+        Loop 1
 		{
 			sleep 50
-            Send {Shift}{Tab}
+            Send {Shift Down}{Tab}{Shift Up}
 		}
         
 		;Send, {Enter}
@@ -202,10 +202,10 @@ VSFindAll_Current()
 		SendTextImmediately( "Current Document" )
 
 		; send focus back to search field
-		Loop 2
+		Loop 1
 		{
 			Sleep 50
-            Send {Shift}{Tab}
+            Send {Shift Down}{Tab}{Shift Up}
 		}
         
 		;Send, {Enter}
