@@ -57,15 +57,71 @@ ActivateLastGoogleChrome()
 ;
 ActivateLastWindowsExplorer()
 {
-    ifWinExist ahk_class CabinetWClass
+    WinGet, myList, List, ahk_class CabinetWClass,, Program Manager
+    WinGet, numOfWinExplorerExist, count, ahk_class CabinetWClass,, Program Manager
+    
+    global windowBarHeight
+    maxHorizontalTiled := 5
+    minHorizontalTiled := 3
+    
+    ; Set defaults 
+    if ( (numOfWinExplorerExist < maxHorizontalTiled) && (numOfWinExplorerExist <= minHorizontalTiled) )
     {
-        OutputToDebugWindow("Existing Windows Explorer")
-        Winactivate, ahk_class CabinetWClass
+        singleHeight := A_ScreenHeight-windowBarHeight
+        singleWidth := A_ScreenWidth / numOfWinExplorerExist
     }
     else
     {
-        Send {LWin Down}{e}{LWin Up}
+        singleHeight := (A_ScreenHeight-windowBarHeight) / 2
+        
+        if ( numOfWinExplorerExist > maxHorizontalTiled )
+            singleWidth := A_ScreenWidth / maxHorizontalTiled
+        else
+            singleWidth := A_ScreenWidth / minHorizontalTiled
     }
+    
+    Loop, %myList%
+    {
+        currentID := myList%A_Index%      
+        
+        ; Window keeps its "maximized state" even when you resize the window via winmove and it's not maximized anymore. So if you 
+        ; start from a miximized window (which I always did), you would have to resize AND manually change the "maximized state" to 0. 
+        WinGet, MinMaxState , MinMax, ahk_id %currentID%   ;-1 for min, 1 for max, 0 otherwise
+        if ( MinMaxState <> 0 )
+            WinRestore, ahk_id %currentID%
+        
+        ; Set width separately if we are in second row
+        if( A_Index > maxHorizontalTiled )
+        {
+            singleWidth := A_ScreenWidth / (numOfWinExplorerExist - maxHorizontalTiled)
+            
+            OutputToDebugWindow( "Bottom: "singleWidth )
+            WinMove, ahk_id %currentID%,, (A_Index - 1 - maxHorizontalTiled) * singleWidth, singleHeight, singleWidth, singleHeight
+        }
+        else if( (A_Index > minHorizontalTiled) && (numOfWinExplorerExist <= maxHorizontalTiled) )
+        {
+            singleWidth := A_ScreenWidth / (numOfWinExplorerExist - minHorizontalTiled)
+            OutputToDebugWindow( "Bottom: "singleWidth )
+            WinMove, ahk_id %currentID%,, (A_Index - 1 - minHorizontalTiled) * singleWidth, singleHeight, singleWidth, singleHeight
+        }
+        else
+        {
+            OutputToDebugWindow( "Top: "singleWidth )
+            WinMove, ahk_id %currentID%,, (A_Index-1) * singleWidth, 0, singleWidth, singleHeight
+        }
+        WinActivate ahk_id %currentID%  
+    }
+    
+    ; Discarded because this only activates one Explorer
+    ; ifWinExist ahk_class CabinetWClass
+    ; {
+        ; ;OutputToDebugWindow("Existing Windows Explorer")
+        ; Winactivate, ahk_class CabinetWClass
+    ; }
+    ; else
+    ; {
+        ; Send {LWin Down}{e}{LWin Up}
+    ; }
     return true
 }
 
@@ -262,6 +318,12 @@ Maximize()
 	}
 	
 	OutputToDebugWindow( "Maximize" )
+    ; Window keeps its "maximized state" even when you resize the window via winmove and it's not maximized anymore. So if you 
+    ; start from a miximized window (which I always did), you would have to resize AND manually change the "maximized state" to 0. 
+    WinGet, MinMaxState , MinMax, A   ;-1 for min, 1 for max, 0 otherwise
+    if ( MinMaxState <> 0 )
+        WinRestore, A
+        
 	WinMaximize, A
 	return
 	
