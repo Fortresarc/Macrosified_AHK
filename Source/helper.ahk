@@ -26,7 +26,7 @@ SendTextImmediately( text )
 	clipboard := text
 	Sleep 50
     SendInput {Ctrl Down}{v}{Ctrl Up}
-    Sleep 50
+    Sleep 300
     
     ClipWait, 2
     clipboard := originalCopiedText
