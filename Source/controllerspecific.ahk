@@ -67,3 +67,11 @@ AltMButton()
 {
     return false
 }
+
+;------------------------------
+;	Alt ... r
+;
+AltR()
+{
+    return false
+}

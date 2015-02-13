@@ -6,8 +6,21 @@
 ;
 ;
 
-
-
+;------------------------------
+; Suspend the script
+;
+ahkSuspend()
+{
+    global VisualStudioTitle
+    
+    if( CheckWindowExist(VisualStudioTitle) == false )
+    {
+        Suspend
+        return true
+    }
+    
+    return false
+}
 ;***************************************************************/
 ;	Normal Window Operation
 ;**************************************************************/

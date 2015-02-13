@@ -20,7 +20,9 @@ Init()
 
     Init_NotepadPlusPlus()
     Init_VS()
-        
+    
+    global DebugDuration                := 1000
+    
 	; Scroll speeds of various programs
 	global VisualStudio_ScrollRate := 10
 	global GoogleChrome_ScrollUpRate := 15

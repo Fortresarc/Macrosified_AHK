@@ -26,7 +26,7 @@
 ;------------------------------
 ; Suspend the script
 ;
-^!p::Suspend 	;Ctrl alt p
+;^!p::Suspend 	;Ctrl alt p
 return
 
 ;------------------------------

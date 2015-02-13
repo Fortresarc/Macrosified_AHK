@@ -572,20 +572,47 @@ LControlWheelDown()
     return
 }
 
+;------------------------------
+; Alt ... p
+; Will conflict with VS "Attach to Process", seems like VS take precedence over controls
+;
+;^!p::
+;{
+    ; if( GetKeyState("LControl", "P") && GetKeyState("p", "P") )
+    ; {
+        ; if( ahkSuspend() == false )
+        ; {
+            ; OutputToDebugWindow("Ctrl Alt p")
+            ; ; Return usual command
+            ; SendInput {Ctrl Down}{Alt Down}{p}{Ctrl Up}{Alt Up}
+            ; return
+        ; }
+    ; }
+    ; else if ( GetKeyState("LAlt", "P") && GetKeyState("p", "P") )
+    ; {
+        ; OutputToDebugWindow("Alt p")
+        ; ; Return usual command
+        ; Send {Alt Down}{p}{Alt Up}
+    ; }
+;}
 
 ;------------------------------
 ;	Alt ... r
+;   Not so useful for VS proj that cannot build and run, and need to manually reload
 ;
 ;!r::
 ~Alt & r::
 {
     if( GetKeyState("Alt", "P") && GetKeyState("r", "P") )
 	{
-        if( VSStopAndRun() == false)
+        ;if( VSStopAndRun() == false)
         {
-            OutputToDebugWindow("Alt r")
-            ; Return usual command
-            Send {Alt Down}{r}{Alt Up}
+            if( AltR() == false )
+            {
+                OutputToDebugWindow("Alt r")
+                ; Return usual command
+                Send {Alt Down}{r}{Alt Up}
+            }            
         }
     }
     return

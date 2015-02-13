@@ -431,6 +431,29 @@ VSWatchInWindow1()
 	return false
 }
 
+
+;------------------------------
+;	Stop Application
+;
+VSStop()
+{
+    global VisualStudioTitle
+	if( CheckWindowActive( VisualStudioTitle ) )
+	{
+		SetTitleMatchMode 2
+
+		CoordMode, Mouse, Screen	; This will set mouse move to use coordinates relative to screen and NOT active window
+		MouseGetPos, StartX, StartY, WhichWindow
+		WinGetActiveTitle, WinTitle
+
+		;ToolTip, Stopping... %StartX% %StartY% %WinTitle%
+		OutputToDebugWindow( "Stopping %StartX% %StartY% %WinTitle%" )
+
+		Send, {Shift Down}{F5}{Shift Up}
+		Sleep 100
+    }
+}
+
 ;------------------------------
 ;	Rerun:	Stop, Run and Refresh Your Application
 ;

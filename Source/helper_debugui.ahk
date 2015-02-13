@@ -94,6 +94,10 @@ OutputToDebugWindow( debugText, duration=1000 )
 {	
 	global EnableDebugWindow
 	global DebugWindowTitle
+    global DebugDuration
+    
+    duration := DebugDuration ; Re init
+    
 	if ( EnableDebugWindow && CheckWindowExist( DebugWindowTitle ) )
 	{
 		Gui, Flash, Off
