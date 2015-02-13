@@ -134,6 +134,94 @@ Reverse()
 	return false
 }
 
+NotepadPlusPlus_FindAll( where )
+{
+    global NotepadPlusPlus_FindInFilesTitle
+    global NotepadPlusPlus_FollowCurrentBox
+    global NotepadPlusPlus_InAllSubFoldersBox
+    global NotepadPlusPlus_SearchField
+    global NotepadPlusPlus_ReplaceField
+    global NotepadPlusPlus_MatchWholeWordBox
+    global NotepadPlusPlus_MatchCaseBox
+
+    if ( where == NotepadPlusPlus_EntireText )
+    {
+        ; Search in current dir
+        ;ControlGet, checked, Checked , , %NotepadPlusPlus_FollowCurrentBox%, %NotepadPlusPlus_FindInFilesTitle%
+        Control, Check, , %NotepadPlusPlus_FollowCurrentBox%, %NotepadPlusPlus_FindInFilesTitle%
+    
+        ; Search recursively
+        Control, Check, , %NotepadPlusPlus_InAllSubFoldersBox%, %NotepadPlusPlus_FindInFilesTitle%
+    }
+    else if ( where == NotepadPlusPlus_CurrentText )
+    {
+        ; Search in current dir
+        Control, Uncheck, , %NotepadPlusPlus_FollowCurrentBox%, %NotepadPlusPlus_FindInFilesTitle%
+        
+        ; Search recursively
+        Control, Uncheck, , %NotepadPlusPlus_InAllSubFoldersBox%, %NotepadPlusPlus_FindInFilesTitle%
+    }
+    
+    ; Match whole word
+    Control, Check, , %NotepadPlusPlus_MatchWholeWordBox%, %NotepadPlusPlus_FindInFilesTitle%
+    
+    ; Match case
+    Control, Check, , %NotepadPlusPlus_MatchCaseBox%, %NotepadPlusPlus_FindInFilesTitle%        
+    
+    ; Focus search field
+    Control, Show, , %NotepadPlusPlus_SearchField%, %NotepadPlusPlus_FindInFilesTitle%
+
+    ; Replace field should be empty
+    ControlSetText, %NotepadPlusPlus_ReplaceField%, , %NotepadPlusPlus_FindInFilesTitle%   
+        
+    ; Refreshes the whole Search UI
+    Control, Show, , , %NotepadPlusPlus_FindInFilesTitle% 
+}
+
+VS_FindAll( where, searchWindowTitle )
+{
+    global VS_LookInBox
+    global VS_LookAtFileTypesBox
+    global VS_MatchWholeWordBox
+    global VS_MatchCaseBox
+    global VS_SearchField
+    
+    ; Constant defines
+    global VS_CurrentText
+    global VS_EntireText
+    global VS_EntireSolutionText
+    global VS_CurrentDocumentText
+
+    if ( where == VS_EntireText )
+    {
+        ; Match whole word
+        ;ControlGet, checked, Checked , , %VS_MatchCaseBox%, %searchWindowTitle%
+        Control, Check, , %VS_MatchCaseBox%, %searchWindowTitle%
+    
+        ; Match case
+        Control, Check, , %VS_MatchWholeWordBox%, %searchWindowTitle%
+        
+        ; Entire
+        ControlSetText, %VS_LookInBox%, %VS_EntireSolutionText%, %searchWindowTitle%   
+    }
+    else if ( where == VS_CurrentText )
+    {
+        ; Match whole word
+        Control, Uncheck, , %VS_MatchCaseBox%, %searchWindowTitle%
+        
+        ; Match case
+        Control, Uncheck, , %VS_MatchWholeWordBox%, %searchWindowTitle%
+        
+        ; Current
+        ControlSetText, %VS_LookInBox%, %VS_CurrentDocumentText%, %searchWindowTitle%   
+    }
+        
+    ; Focus search field
+    Control, Show, , %VS_SearchField%, %searchWindowTitle% 
+        
+    ; Refreshes the whole Search UI
+    Control, Show, , , %searchWindowTitle% 
+}
 ;------------------------------
 ;	Find all occurrences in Entire document
 ;
@@ -141,43 +229,27 @@ VSFindAll_Entire()
 {
 	global VisualStudioTitle
     global NotepadPlusPlusTitle
+    global NotepadPlusPlus_EntireText
+    global VS_EntireText
+    
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow("Find all `(Entire`)")
 		Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
 		Sleep 50
-		Send {Tab}        
-        SendTextImmediately( "Entire Solution" )
-		
-		; send focus back to search field
-        Loop 1
-		{
-			sleep 50
-            Send {Shift Down}{Tab}{Shift Up}
-		}
         
-		;Send, {Enter}
+        WinGetTitle, searchWindowTitle, A
+        VS_FindAll( VS_EntireText, searchWindowTitle )
+        
 		return true
 	}
     else if (CheckWindowActive( NotepadPlusPlusTitle )) 
     {
 		OutputToDebugWindow("Find all `(Entire`) Notepad++")
 		Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
-		Sleep 50
+		Sleep 10
         
-        ; send focus back to "Follow current doc." directory
-        ; NOTE: If already selected it will still work
-		Loop 5
-		{
-			Sleep 50
-			Send {Tab}
-		}
-        Send, {Space}
-        
-        ; Search sub folders too
-        ; NOTE: If already selected it MAY NOT work
-        Send, {Tab}
-        Send, {Space}
+        NotepadPlusPlus_FindAll( NotepadPlusPlus_EntireText )
         
         return true
     }
@@ -192,38 +264,27 @@ VSFindAll_Current()
 {
 	global VisualStudioTitle
     global NotepadPlusPlusTitle
+    global NotepadPlusPlus_CurrentText
+    global VS_CurrentText
+    
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
 		OutputToDebugWindow("Find all `(Current`)")
 		Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
 		Sleep 50
-		Send, {Tab}
-		Sleep 50
-		SendTextImmediately( "Current Document" )
-
-		; send focus back to search field
-		Loop 1
-		{
-			Sleep 50
-            Send {Shift Down}{Tab}{Shift Up}
-		}
+		
+        WinGetTitle, searchWindowTitle, A
+        VS_FindAll( VS_CurrentText, searchWindowTitle )
         
-		;Send, {Enter}
 		return true
 	}
     else if (CheckWindowActive( NotepadPlusPlusTitle )) 
     {
 		OutputToDebugWindow("Find all `(Current`) Notepad++")
 		Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
-		Sleep 50
+		Sleep 10
         
-        ; send focus back to "Follow current doc." directory
-		Loop 5
-		{
-			Sleep 50
-			Send {Tab}
-		}
-        Send, {Space}   ; Checks the checkbox
+        NotepadPlusPlus_FindAll( NotepadPlusPlus_CurrentText )
         
         return true
     }
@@ -231,45 +292,32 @@ VSFindAll_Current()
 }
 
 ;------------------------------
-;	My version on "Go to Definition"
+;	My version on "Go to Definition" ONLY works for C++ codes
 ;
 VSGoToDefinition()
 {
 	global VisualStudioTitle
+    global VS_EntireText
+    global VS_SearchField
 	functionChar := "`:`:"
-    waitInterval = 300
+    
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
-		;if( GetKeyState("Alt", "P") && GetKeyState("d", "P") )
-		{
-			; Select current word 
-			Click
-			Click
-
-			OutputToDebugWindow( "Go to Definition" )
-			; Find all in entire solution
-			Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
-			Sleep waitInterval	;This is the optimal time to wait for Find all window
-
-			clipboard = asdf
-			clipboard =  ; Start off empty to allow ClipWait to detect when the text has arrived.
-			Send ^c
-			ClipWait, 2  ; Wait for the clipboard to contain text.
-			clipboard := clipboard		; Cannot put %% here, not sure why
-			ToolTip, Goto Definition -> %clipboard%
-
-			; Remove all CR+LF's from the clipboard contents:
-			clipboard2 := RegExReplace(clipboard,"/")
-
+        Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
+		Sleep 50
 		
-			newStr := functionChar . clipboard2
-            SendTextImmediately( newStr )
-
-			Send, {Tab}
-			SendTextImmediately( "Entire Solution" )
-
-			ToolTip
-		}
+        WinGetTitle, searchWindowTitle, A
+        VS_FindAll( VS_EntireText, searchWindowTitle )
+    
+        ControlGetText, origText, %VS_SearchField%, %searchWindowTitle%
+        newText := functionChar . origText
+        
+        OutputToDebugWindow( "Goto Definition" )
+        ControlSetText, %VS_SearchField%, %newText%, %searchWindowTitle%
+        
+        ; Send focus back to search field
+        Control, Show, , %VS_SearchField%, %searchWindowTitle%
+        
 		return true
 	}
 	return false

@@ -18,6 +18,9 @@ Init()
     global GoogleChromeExe              := "chrome.exe"
     global NotepadPlusPlusExe           := "notepad`+`+.exe"
 
+    Init_NotepadPlusPlus()
+    Init_VS()
+        
 	; Scroll speeds of various programs
 	global VisualStudio_ScrollRate := 10
 	global GoogleChrome_ScrollUpRate := 15
@@ -52,4 +55,36 @@ Init_CommonVariables()
 	global windowBarY			:= TY
 	global windowBarWidth		:= TW
 	global windowBarHeight		:= TH
+}
+
+Init_NotepadPlusPlus()
+{
+    ; Buttons
+    global NotepadPlusPlus_FindInFilesTitle := "Find in Files"
+    global NotepadPlusPlus_FollowCurrentBox := "Button2"
+    global NotepadPlusPlus_InAllSubFoldersBox := "Button3"
+    global NotepadPlusPlus_MatchWholeWordBox := "Button11"
+    global NotepadPlusPlus_MatchCaseBox := "Button12"
+    global NotepadPlusPlus_SearchField := "Edit1"
+    global NotepadPlusPlus_ReplaceField := "Edit2"
+    
+    ; Constant defines
+    global NotepadPlusPlus_CurrentText := "current"
+    global NotepadPlusPlus_EntireText := "entire"
+}
+
+Init_VS()
+{
+    ; Buttons
+    global VS_LookInBox := "Edit5"
+    global VS_LookAtFileTypesBox := "Edit6"
+    global VS_MatchWholeWordBox := "Button20"
+    global VS_MatchCaseBox := "Button19"
+    global VS_SearchField := "Edit3"
+    
+    ; Constant defines
+    global VS_CurrentText := "current"
+    global VS_EntireText := "entire"
+    global VS_EntireSolutionText := "Entire Solution"
+    global VS_CurrentDocumentText := "Current Document"
 }
