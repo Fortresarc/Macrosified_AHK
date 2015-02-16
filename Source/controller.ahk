@@ -597,6 +597,23 @@ LControlWheelDown()
 ;}
 
 ;------------------------------
+;    Alt ... k
+;
+~Alt & k::
+{
+    if( GetKeyState("Alt", "P") && GetKeyState("k", "P") )
+    {
+        if( AltK() == false )
+        {
+            OutputToDebugWindow("Alt k")
+            ; Return usual command
+            Send {Alt Down}{k}{Alt Up}
+        }
+    }
+    return
+}
+
+;------------------------------
 ;	Alt ... r
 ;   Not so useful for VS proj that cannot build and run, and need to manually reload
 ;

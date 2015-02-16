@@ -75,3 +75,11 @@ AltR()
 {
     return false
 }
+
+;------------------------------
+;	Alt ... k
+;
+AltK()
+{
+    return false
+}
