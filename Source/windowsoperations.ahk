@@ -73,6 +73,13 @@ ActivateLastWindowsExplorer()
     WinGet, myList, List, ahk_class CabinetWClass,, Program Manager
     WinGet, numOfWinExplorerExist, count, ahk_class CabinetWClass,, Program Manager
     
+    ; Discarded because this only activates one Explorer
+    if( numOfWinExplorerExist == 0 ) ;ifWinNotExist ahk_class CabinetWClass
+    {
+        Send {LWin Down}{e}{LWin Up}
+        return true
+    }
+    
     global windowBarHeight
     maxHorizontalTiled := 5
     minHorizontalTiled := 3
@@ -125,16 +132,6 @@ ActivateLastWindowsExplorer()
         WinActivate ahk_id %currentID%  
     }
     
-    ; Discarded because this only activates one Explorer
-    ; ifWinExist ahk_class CabinetWClass
-    ; {
-        ; ;OutputToDebugWindow("Existing Windows Explorer")
-        ; Winactivate, ahk_class CabinetWClass
-    ; }
-    ; else
-    ; {
-        ; Send {LWin Down}{e}{LWin Up}
-    ; }
     return true
 }
 
