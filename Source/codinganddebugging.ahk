@@ -144,6 +144,9 @@ NotepadPlusPlus_FindAll( where )
     global NotepadPlusPlus_MatchWholeWordBox
     global NotepadPlusPlus_MatchCaseBox
 
+    ; Refreshes the whole Search UI
+    Control, Show, , , %NotepadPlusPlus_FindInFilesTitle% 
+    
     if ( where == NotepadPlusPlus_EntireText )
     {
         ; Search in current dir
