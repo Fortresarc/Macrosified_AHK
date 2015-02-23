@@ -195,32 +195,45 @@ VS_FindAll( where, searchWindowTitle )
     global VS_EntireSolutionText
     global VS_CurrentDocumentText
 
+    ; Refreshes the whole Search UI
+    Control, Show, , , %searchWindowTitle% 
+    
     if ( where == VS_EntireText )
     {
+        ;
+        ;   IMPORTANT NOTE: 
+        ;   - Control, Cmd [, Value, Control, WinTitle, WinText, ExcludeTitle, ExcludeText]  
+        ;     Control ... ahk_id %VS_MatchWholeWordBox% should be used as WinText
+        ;
+        ;   - ControlSetText [, Control, NewText, WinTitle, WinText, ExcludeTitle, ExcludeText]
+        ;     ControlSetText ahk_id %VS_MatchWholeWordBox% should be used as WinTitle
+        ;
+        
+        
         ; Match whole word
-        ;ControlGet, checked, Checked , , %VS_MatchCaseBox%, %searchWindowTitle%
-        Control, Check, , %VS_MatchCaseBox%, %searchWindowTitle%
+        ;ControlGet, checked, Checked , , %VS_MatchCaseBox%, %searchWindowTitle%    ; Also works but VS_MatchCaseBox := Edit5 --> Don't work after com restarts because name is dynamically assigned
+        Control, UnCheck, , , ahk_id %VS_MatchWholeWordBox%
     
         ; Match case
-        Control, Check, , %VS_MatchWholeWordBox%, %searchWindowTitle%
+        Control, UnCheck, , , ahk_id %VS_MatchCaseBox%
         
         ; Entire
-        ControlSetText, %VS_LookInBox%, %VS_EntireSolutionText%, %searchWindowTitle%   
+        ControlSetText, , %VS_EntireSolutionText%, ahk_id %VS_LookInBox%   
     }
     else if ( where == VS_CurrentText )
     {
         ; Match whole word
-        Control, Uncheck, , %VS_MatchCaseBox%, %searchWindowTitle%
+        Control, Uncheck, , , ahk_id %VS_MatchWholeWordBox%
         
         ; Match case
-        Control, Uncheck, , %VS_MatchWholeWordBox%, %searchWindowTitle%
+        Control, Uncheck, , , ahk_id %VS_MatchCaseBox%
         
         ; Current
-        ControlSetText, %VS_LookInBox%, %VS_CurrentDocumentText%, %searchWindowTitle%   
+        ControlSetText, , %VS_CurrentDocumentText%, ahk_id %VS_LookInBox%   
     }
         
     ; Focus search field
-    Control, Show, , %VS_SearchField%, %searchWindowTitle% 
+    Control, Show, , , ahk_id %VS_SearchField%
         
     ; Refreshes the whole Search UI
     Control, Show, , , %searchWindowTitle% 
@@ -239,9 +252,10 @@ VSFindAll_Entire()
 	{
 		OutputToDebugWindow("Find all `(Entire`)")
 		Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
-		Sleep 50
+		Sleep 100
         
         WinGetTitle, searchWindowTitle, A
+        OutputToDebugWindow( searchWindowTitle )
         VS_FindAll( VS_EntireText, searchWindowTitle )
         
 		return true
@@ -274,7 +288,7 @@ VSFindAll_Current()
 	{
 		OutputToDebugWindow("Find all `(Current`)")
 		Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
-		Sleep 50
+		Sleep 100
 		
         WinGetTitle, searchWindowTitle, A
         VS_FindAll( VS_CurrentText, searchWindowTitle )

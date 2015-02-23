@@ -1,6 +1,6 @@
 #Include windowsoperations.ahk
 #Include codinganddebugging.ahk
-#Include controllerspecific.ahk
+#Include  *i %A_ScriptDir%\specialized\controllerspecific.ahk      ; *i means ignore if we can't find this file
 
 ;======================================================================================================================
 ; NOTE: 
@@ -138,11 +138,18 @@
 		{
 			if( ExitCurrentTab() == false )
             {
-                if( CtrlRB() == false )
+                ; Checking if CtrlRB exists, effectively if we don't include controllerspecific.ahk this source code will still
+                ; work
+                If IsFunc("CtrlRB")
                 {
-                    OutputToDebugWindow("Control RButton")
-                    Send ^RButton
+                    funcName = CtrlRB
+                    if ( %funcName%() == true)
+                    {
+                        return
+                    }
                 }
+                OutputToDebugWindow("Control RButton")
+                Send ^RButton
             }
 		}
 	}
@@ -201,13 +208,18 @@ LControlWheelUp()
         {
             if( Reverse() == false )
             {
-                if( CtrlShiftWheelUp() == false )
+                If IsFunc("CtrlShiftWheelUp")
                 {
-                    OutputToDebugWindow("Control Shift WheelUp")
-                    Send {Ctrl Down}{Shift Down}{WheelUp}{Shift Up}{Ctrl Up}
+                    funcName = CtrlShiftWheelUp
+                    if ( %funcName%() == true)
+                    {
+                        return
+                    }
                 }
-            }
-            
+                
+                OutputToDebugWindow("Control Shift WheelUp")
+                Send {Ctrl Down}{Shift Down}{WheelUp}{Shift Up}{Ctrl Up}
+            }            
         }
 		;-----------------------
 		; LControl WheelUp
@@ -244,11 +256,16 @@ LControlWheelDown()
         {
             if( Forward() == false )
             {
-                if( CtrlShiftWheelDown() == false )
+                If IsFunc("CtrlShiftWheelDown")
                 {
-                    OutputToDebugWindow("LControl WheelDown")
-                    Send {Ctrl Down}{Shift Down}{WheelDown}{Shift Up}{Ctrl Up}
+                    funcName = CtrlShiftWheelDown
+                    if ( %funcName%() == true)
+                    {
+                        return
+                    }
                 }
+                OutputToDebugWindow("LControl WheelDown")
+                Send {Ctrl Down}{Shift Down}{WheelDown}{Shift Up}{Ctrl Up}
             }
         }
 		;-----------------------
@@ -408,13 +425,18 @@ LControlWheelDown()
 	{
 		if( VSContinue_PressedAndHold() == false )
 		{
-            if( AltLButton() == false )
+            If IsFunc("AltLButton")
             {
-                OutputToDebugWindow( "Alt LButton")
-			
-                ; Return usual command
-                Send {LAlt Down}{LButton}{LAlt Up}
+                funcName = AltLButton
+                if ( %funcName%() == true)
+                {
+                    return
+                }
             }
+            OutputToDebugWindow( "Alt LButton")
+        
+            ; Return usual command
+            Send {LAlt Down}{LButton}{LAlt Up}
 		}
 	}
 	VSContinue_Released()
@@ -431,11 +453,16 @@ LControlWheelDown()
 	{
         if( VSStepOut() == false )
         {
-            if( AltRButton() == false )
+            If IsFunc("AltRButton")
             {
-                OutputToDebugWindow( "Alt RButton" )
-                Send, {Alt Down}{RButton}{Alt Up}
+                funcName = AltRButton
+                if ( %funcName%() == true)
+                {
+                    return
+                }
             }
+            OutputToDebugWindow( "Alt RButton" )
+            Send, {Alt Down}{RButton}{Alt Up}
         }
     }
     return
@@ -451,11 +478,16 @@ LControlWheelDown()
 	{
         if( VSStepOver() == false )
         {
-            if( AltWheelDown() == false )
+            If IsFunc("AltWheelDown")
             {
-                OutputToDebugWindow( "Alt WheelDown" )
-                Send, {Alt Down}{WheelDown}{Alt Up}
+                funcName = AltWheelDown
+                if ( %funcName%() == true)
+                {
+                    return
+                }
             }
+            OutputToDebugWindow( "Alt WheelDown" )
+            Send, {Alt Down}{WheelDown}{Alt Up}
         }
     }
     return
@@ -471,11 +503,16 @@ LControlWheelDown()
 	{
         if( VSStepInto() == false )
         {
-            if( AltMButton() == false )
+            If IsFunc("AltMButton")
             {
-                OutputToDebugWindow( "Alt MButton" )
-                Send, {Alt Down}{MButton}{Alt Up}
+                funcName = AltMButton
+                if ( %funcName%() == true)
+                {
+                    return
+                }
             }
+            OutputToDebugWindow( "Alt MButton" )
+            Send, {Alt Down}{MButton}{Alt Up}
         }
     }
     return
@@ -561,12 +598,17 @@ LControlWheelDown()
 	{
         if( VSFindAll_Entire() == false)
         {
-            if( AltE() == false )
+            If IsFunc("AltE") 
             {
-                OutputToDebugWindow("Alt e")
-                ; Return usual command
-                Send {Alt Down}{e}{Alt Up}
+                funcName = AltE
+                if ( %funcName%() == true)
+                {
+                    return
+                }
             }
+            OutputToDebugWindow("Alt e")
+            ; Return usual command
+            Send {Alt Down}{e}{Alt Up}
         }
     }
     return
@@ -603,12 +645,17 @@ LControlWheelDown()
 {
     if( GetKeyState("Alt", "P") && GetKeyState("k", "P") )
     {
-        if( AltK() == false )
+        If IsFunc("AltK") 
         {
-            OutputToDebugWindow("Alt k")
-            ; Return usual command
-            Send {Alt Down}{k}{Alt Up}
+            funcName = AltK
+            if ( %funcName%() == true)
+            {
+                return
+            }
         }
+        OutputToDebugWindow("Alt k")
+        ; Return usual command
+        Send {Alt Down}{k}{Alt Up}
     }
     return
 }
@@ -624,12 +671,17 @@ LControlWheelDown()
 	{
         ;if( VSStopAndRun() == false)
         {
-            if( AltR() == false )
+            If IsFunc("AltR") >= 1
             {
-                OutputToDebugWindow("Alt r")
-                ; Return usual command
-                Send {Alt Down}{r}{Alt Up}
-            }            
+                funcName = AltR
+                if ( %funcName%() == true)
+                {
+                    return
+                }
+            }
+            OutputToDebugWindow("Alt r")
+            ; Return usual command
+            Send {Alt Down}{r}{Alt Up}
         }
     }
     return

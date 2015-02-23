@@ -78,11 +78,11 @@ Init_NotepadPlusPlus()
 Init_VS()
 {
     ; Buttons
-    global VS_LookInBox := "Edit5"
-    global VS_LookAtFileTypesBox := "Edit6"
-    global VS_MatchWholeWordBox := "Button20"
-    global VS_MatchCaseBox := "Button19"
-    global VS_SearchField := "Edit3"
+    global VS_LookInBox := "0x21516"
+    global VS_LookAtFileTypesBox := "0x20b22"
+    global VS_MatchWholeWordBox := "0x314d2"
+    global VS_MatchCaseBox := "0x314d8"
+    global VS_SearchField := "0x61510"
     
     ; Constant defines
     global VS_CurrentText := "current"

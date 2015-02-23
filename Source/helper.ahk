@@ -13,6 +13,27 @@
 ;	HELPERS
 ;
 
+;------------------------------------------------------------
+;	Get HwndId which is unique 
+;
+GetHwndId(classNN, windowTitle)
+{
+    ; E.g. classNN := "Edit3"
+    
+    ControlGet, hwndId, Hwnd, , %classNN%, %windowTitle%
+    
+    IfWinExist, ahk_id %hwndId%
+    {
+        ControlFocus, , ahk_id %hwndId%
+        OutputToDebugWindow( "Exists hwndId="hwndId )
+        ;ControlClick, , ahk_id %hwndId%
+    }
+    else
+    {
+        OutputToDebugWindow( "NOT Exists hwndId="hwndId )
+    }
+}
+
 ;------------------------------
 ;	Send text in a flash without waiting for it to type out usually using Send, SendInput
 ;
