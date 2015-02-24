@@ -10,6 +10,8 @@ VSOpenCurrentFileInNotepadPlusPlus()
 {
 	global VisualStudioTitle
     global NotepadPlusPlusTitle
+    global SmartGitTitle
+    
     pauseInterval = 200
     pauseIntervalLong = 800
 	if ( CheckWindowActive( VisualStudioTitle ) )
@@ -56,7 +58,17 @@ VSOpenCurrentFileInNotepadPlusPlus()
 			Send {Esc}
 		}
 		return true
-	}	
+	}
+    else if ( CheckWindowActive( SmartGitTitle ) )
+    {
+        OutputToDebugWindow("Open in Notepad`+`+(SmartGit)")
+        Send {Alt Down}{Insert}{Alt Up}
+        
+        ClipWait, 2  ; Wait for the clipboard to contain text.
+        
+        OpenNotepadPlusPlus(clipboard)
+    }
+    
 	return false
 }
 
