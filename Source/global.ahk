@@ -13,6 +13,7 @@ Init()
 	global NotepadPlusPlusTitle 		:= "Notepad`+`+"
 	global DebugWindowTitle 			:= "DebugMYGUI"
     global AutoHotKeyTitle              := "AutoHotkey"
+    global SmartGitTitle                := "SmartGit"
     
     ; Exe
     global GoogleChromeExe              := "chrome.exe"

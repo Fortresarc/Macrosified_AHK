@@ -69,6 +69,7 @@ Forward()
 	global AraxisMergeTitle
     global GoogleChromeTitle
     global NotepadPlusPlusTitle
+    global SmartGitTitle
     
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
@@ -78,7 +79,7 @@ Forward()
 	}
 	else if ( CheckWindowActive( AraxisMergeTitle )  )
 	{
-		OutputToDebugWindow("Next Diff")
+		OutputToDebugWindow("Next Diff(Araxis)")
 		Send, {F8}
         return true
 	}
@@ -94,6 +95,13 @@ Forward()
         Send {Ctrl Down}{PgDn}{Ctrl Up}
         return true
     }
+    else if ( CheckWindowActive( SmartGitTitle ) )
+    {
+        OutputToDebugWindow("Next Diff(SmartGit)")
+        Send {F6}
+        return true
+    }
+    
 	return false
 }
 
@@ -106,6 +114,7 @@ Reverse()
 	global AraxisMergeTitle
     global GoogleChromeTitle
     global NotepadPlusPlusTitle
+    global SmartGitTitle
     
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
@@ -115,7 +124,7 @@ Reverse()
 	}
 	else if ( CheckWindowActive( AraxisMergeTitle ) )
 	{
-		OutputToDebugWindow("Prev Diff")
+		OutputToDebugWindow("Prev Diff(Araxis)")
 		Send, {F7}
         return true
 	}
@@ -131,6 +140,13 @@ Reverse()
         Send {Ctrl Down}{PgUp}{Ctrl Up}
         return true
     }
+    else if ( CheckWindowActive( SmartGitTitle ) )
+    {
+        OutputToDebugWindow("Prev Diff(SmartGit)")
+        Send {Shift Down}{F6}{Shift Up}
+        return true
+    }
+    
 	return false
 }
 
