@@ -4,6 +4,105 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;------------------------------
+;	Visual Studio switch between header and cpp files
+;
+VSSwitchHeaderAndCpp()
+{
+    global VisualStudioTitle
+    global NotepadPlusPlusTitle
+    headerString := "`.h"
+    cppString := "`.cpp"
+    dynamicString := "asdf"
+    switchedFileType := headerString
+    
+	if ( CheckWindowActive( VisualStudioTitle ) )
+	{
+        filePath := VSCopyFullPath()
+        
+        if( InStr(filePath, headerString) )
+        {
+            ; Replace all .h with .cpp:
+            StringReplace, switchedFilePath, filePath, %headerString%, %cppString%, All
+            switchedFileType := cppString
+        }
+        else if ( InStr(filePath, cppString) )
+        {
+            ; Replace all .cpp with .h :
+            StringReplace, switchedFilePath, filePath, %cppString%, %headerString%, All
+            switchedFileType := headerString
+        } 
+        
+        dynamicString := switchedFilePath
+        
+        ;ReplaceBackWithForwardSlash(dynamicString, outFilePath)
+        if( FileExist(switchedFilePath) )
+        {
+            OutputToDebugWindow("Found :In same directory")
+            run % devenv /edit switchedFilePath
+            return true
+        }
+        else
+        {
+            
+            properFilePath := ReplaceIllegalChar(switchedFilePath)
+            SplitPath, properFilePath, name, dir, ext, name_no_ext, drive
+            
+            ; infoString := name_no_ext
+            ; infoString .= switchedFileType
+            ; infoString .= " in "
+            ; infoString .= dir
+            ; if( Continue("Can't find "infoString, "Do you want to search recursively?") == false )
+                ; return false
+            
+            name_w_switchedFileType := name_no_ext
+            name_w_switchedFileType .= switchedFileType
+         
+            ;StringLeft, fileDrive, dynamicString, 3   
+            ;if( FindRecursively(name_w_switchedFileType, fileDrive, switchedFileType, outFilePath) )
+            if( FindUsingCMD( name_w_switchedFileType, drive, switchedFileType, outFilePath) )
+            {
+                ; Remove all CR+LF's  (StringReplace, input and output can be the same)
+                StringReplace, outFilePath, outFilePath, `r`n, , All
+                
+                OutputToDebugWindow("Found :"outFilePath)
+                clipboard := outFilePath
+                run % devenv /edit outFilePath
+                return true
+            }
+            else
+            {
+                OutputToDebugWindow("Cannot find in "fileDrive)
+            }
+        }
+    }
+    return false
+}
+
+;------------------------------
+;	Visual Studio copy full path (Assumes VS is active window)
+;
+VSCopyFullPath()
+{
+    pauseInterval = 200
+    
+    clipboard = asdf
+    clipboard =  ; Start off empty to allow ClipWait to detect when the text has arrived.
+
+    Send, {Alt Down}{-}{Alt Up}
+    Sleep pauseInterval
+    Send, f
+    Sleep pauseInterval
+    Send {Enter}
+    Sleep pauseInterval
+
+    ClipWait, 2  ; Wait for the clipboard to contain text.
+    clipboard := clipboard		; Cannot put %% here, not sure why
+    clipboard2 := ReplaceIllegalChar( clipboard )
+    
+    return clipboard2
+}
+
+;------------------------------
 ;	Open current file in Notepad++
 ;
 VSOpenCurrentFileInNotepadPlusPlus()
@@ -21,20 +120,7 @@ VSOpenCurrentFileInNotepadPlusPlus()
 		copiedLine := CopyWholeLine()
 		Sleep pauseInterval
 
-		clipboard = asdf
-		clipboard =  ; Start off empty to allow ClipWait to detect when the text has arrived.
-
-		Send, {Alt Down}{-}{Alt Up}
-		Sleep pauseInterval
-		Send, f
-		Sleep pauseInterval
-		Send {Enter}
-		Sleep pauseInterval
-	;	Send, {Enter}
-
-		ClipWait, 2  ; Wait for the clipboard to contain text.
-		clipboard := clipboard		; Cannot put %% here, not sure why
-		clipboard2 := ReplaceIllegalChar( clipboard )
+		clipboard2 := VSCopyFullPath()
 		
 		TimedToolTip( clipboard2, 1000 )
 
@@ -162,6 +248,9 @@ Reverse()
 	return false
 }
 
+;------------------------------
+;	Find all Notepad++
+;
 NotepadPlusPlus_FindAll( where )
 {
     global NotepadPlusPlus_FindInFilesTitle
@@ -209,6 +298,42 @@ NotepadPlusPlus_FindAll( where )
     Control, Show, , , %NotepadPlusPlus_FindInFilesTitle% 
 }
 
+;------------------------------
+;	Find all helper in Visual Studio, slow because we tab to the control box rather than
+;   selecting it instantly
+;
+VS_FindAll_Slow(where)
+{
+	global VisualStudioTitle
+    global NotepadPlusPlusTitle
+    global VS_Current
+    global VS_Entire
+    global VS_EntireSolutionText
+    global VS_CurrentDocumentText
+    
+    Send {Tab}  
+    Sleep 50
+    
+    if ( where == VS_Entire )
+    {
+        SendTextImmediately( VS_EntireSolutionText )
+    }
+    else
+    {
+        SendTextImmediately( VS_CurrentDocumentText )
+    }
+    ; send focus back to search field
+    Send {Shift Down}{Tab}{Shift Up}
+        
+    ;Send, {Enter}
+    return true
+}
+
+;------------------------------
+;	Find all helper (Fast) in Visual Studio
+;   Selecting it instantly. HOWEVER! the control id(unique), classNN keeps changing so
+;   I can't use this version. 
+;
 VS_FindAll( where, searchWindowTitle )
 {
     global VS_LookInBox
@@ -218,15 +343,15 @@ VS_FindAll( where, searchWindowTitle )
     global VS_SearchField
     
     ; Constant defines
-    global VS_CurrentText
-    global VS_EntireText
+    global VS_Current
+    global VS_Entire
     global VS_EntireSolutionText
     global VS_CurrentDocumentText
 
     ; Refreshes the whole Search UI
     Control, Show, , , %searchWindowTitle% 
     
-    if ( where == VS_EntireText )
+    if ( where == VS_Entire )
     {
         ;
         ;   IMPORTANT NOTE: 
@@ -248,7 +373,7 @@ VS_FindAll( where, searchWindowTitle )
         ; Entire
         ControlSetText, , %VS_EntireSolutionText%, ahk_id %VS_LookInBox%   
     }
-    else if ( where == VS_CurrentText )
+    else if ( where == VS_Current )
     {
         ; Match whole word
         Control, Uncheck, , , ahk_id %VS_MatchWholeWordBox%
@@ -274,17 +399,15 @@ VSFindAll_Entire()
 	global VisualStudioTitle
     global NotepadPlusPlusTitle
     global NotepadPlusPlus_EntireText
-    global VS_EntireText
+    global VS_Entire
     
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
-		OutputToDebugWindow("Find all `(Entire`)")
+		OutputToDebugWindow("VS Find all `(Entire`)")
 		Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
 		Sleep 100
         
-        WinGetTitle, searchWindowTitle, A
-        OutputToDebugWindow( searchWindowTitle )
-        VS_FindAll( VS_EntireText, searchWindowTitle )
+        VS_FindAll_Slow( VS_Entire )
         
 		return true
 	}
@@ -310,16 +433,15 @@ VSFindAll_Current()
 	global VisualStudioTitle
     global NotepadPlusPlusTitle
     global NotepadPlusPlus_CurrentText
-    global VS_CurrentText
+    global VS_Current
     
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
-		OutputToDebugWindow("Find all `(Current`)")
+		OutputToDebugWindow("VS Find all `(Current`)")
 		Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
 		Sleep 100
 		
-        WinGetTitle, searchWindowTitle, A
-        VS_FindAll( VS_CurrentText, searchWindowTitle )
+        VS_FindAll_Slow( VS_Current )
         
 		return true
 	}
@@ -342,7 +464,7 @@ VSFindAll_Current()
 VSGoToDefinition()
 {
 	global VisualStudioTitle
-    global VS_EntireText
+    global VS_Entire
     global VS_SearchField
 	functionChar := "`:`:"
     
@@ -352,7 +474,7 @@ VSGoToDefinition()
 		Sleep 50
 		
         WinGetTitle, searchWindowTitle, A
-        VS_FindAll( VS_EntireText, searchWindowTitle )
+        VS_FindAll( VS_Entire, searchWindowTitle )
     
         ControlGetText, origText, %VS_SearchField%, %searchWindowTitle%
         newText := functionChar . origText

@@ -9,9 +9,20 @@
 
 ; Debugging
 #Include helper_debugui.ahk
-;------------------------------------------------------------
+;--------------------------------------------------------------------------------------------------
 ;	HELPERS
 ;
+
+;------------------------------------------------------------
+;	Ask/ prompts user a question with yes/no feedback
+;
+Continue(info, question="")
+{
+    MsgBox, 4, , %info%`n`n%question%
+    IfMsgBox, No
+        return false
+    return true
+}
 
 ;------------------------------------------------------------
 ;	Get HwndId which is unique 
@@ -212,6 +223,7 @@ CreateIllegalStringArray()
 	StringArray.Insert("`:")
 	StringArray.Insert("!")
 	StringArray.Insert("`=")
+    StringArray.Insert("`.")
 
 	return StringArray
 }
@@ -264,9 +276,134 @@ Paste()
 }
 
 
-;------------------------------
+;--------------------------------------------------------------------------------------------------
 ;	Windows Folders
 ;
+
+;------------------------------
+;	Replace \ with /
+;
+ReplaceBackWithForwardSlash(filePath, ByRef outFilePath)
+{
+    StringReplace, outFilePath, filePath, \, /, All
+}
+
+;------------------------------
+;	Go up a level in folder hierarchy i.e. "cd .."
+;
+FilePath_cd_Up(filePath)
+{
+    slash = \
+    StringGetPos, lastSlashPosition, filePath, %slash%, R
+    ; +1 to include slash
+    StringLeft, upFilePath, filePath, lastSlashPosition+1
+    
+    return upFilePath
+}
+
+;------------------------------
+;	Find using cmd in folders. 
+;   NOTE:   WILL OVERWRITE your clipboard
+;           "where" should be a "drive:"
+;           "type" should be ".extension"
+;           "whichFileName" should HAVE ".extension"
+FindUsingCMD(whichFileName, where, type, ByRef foundFilePath)
+{
+    delimiter := "\"
+    clipboard := ""
+    searchString := delimiter
+    searchString .= whichFileName
+    
+    ; Runs 2 commands consecutively (&&)
+    gotoDirCommand := where             ;"c:"
+    findFileCommand := "dir /s /b "     ;"dir /s /b \example.h | clip"
+    findFileCommand .= searchString
+    findFileCommand .= " | clip"    
+    RunWait, %comspec% /c %gotoDirCommand% && %findFileCommand%, , hide
+    
+    ClipWait, 2
+    findResult := clipboard
+    
+    if( InStr(findResult, searchString) )
+    {
+        foundFilePath := findResult
+        return true
+    }
+    ;MsgBox, Notfound %ErrorLevel%  %clipboard%
+    return false
+}
+
+;------------------------------
+;	Find recursively into folders. (Terminable)
+;   NOTE:   "where" should be a "drive:\"
+;           "type" should be ".extension"
+;           "whichFileName" should HAVE ".extension"
+;
+FindRecursively(whichFileName, where, type, ByRef foundFilePath)
+{
+    global TerminateAll
+    delimiter := "\"
+    fileMatched := false
+    
+    timeToSleep := 100
+    Loop, %where%*%type%, , 1  ; Recurse into subfolders.
+    {
+        ; TODO if more than one Terminable, this might not work
+        if( TerminateAll )
+        {
+            OutputToDebugWindow("Terminate FindRecursively")
+            TerminateAll := false
+            return false
+        }
+        currentFilePath = %A_LoopFileFullPath%
+                    
+        OutputToDebugWindow( currentFilePath )        
+        
+        if( MatchWordFilePath(whichFileName, currentFilePath, delimiter) )
+        {
+            OutputToDebugWindow("Found: "currentFilePath)
+            ;Continue("FoundRecursively Matched "currentFilePath)
+            ;{
+                foundFilePath := currentFilePath
+                return true
+            ;}
+        }
+        
+        if( %A_Index% >= timeToSleep )
+            Sleep 1000
+    }
+    return false
+}
+
+;------------------------------
+;	Match word exactly in file path
+;   E.g.    whichFilePath= C:\Prog\whichFile.txt
+;           delimiter = \
+;           searchWord = whichFile.txt
+;           returns true
+;
+MatchWordFilePath(searchWord, whichFilePath, delimiter)
+{
+    position := InStr(whichFilePath, searchWord)    ; InStr position 1 is first
+    
+    if( position>0 )
+    {
+        properFilePath := ReplaceIllegalChar(whichFilePath)
+        
+        foundFilePath := properFilePath
+        
+        StringMid, wasDelimiter, properFilePath, position-1, 1, L
+        if ( wasDelimiter==delimiter )
+        {
+            return true
+        }
+        else
+        {
+            return false
+        }
+    }
+}
+
 OpenCurrentSelectedWithNotepadPlusPlus()
 {
     allSelectedFilePath := GetFileSelected_Explorer() 
@@ -294,6 +431,21 @@ GetFileSelected_Explorer(hwnd="") {
 	for item in sel
 	ToReturn .= item.path "`n"
 	return Trim(ToReturn,"`n")
+}
+
+;------------------------------
+;	Get the Control Id, ClassNN and etc
+;
+GetControlIds()
+{
+    MouseGetPos, , , id, control
+    WinGetTitle, title, ahk_id %id%
+    WinGetClass, class, ahk_id %id%
+    ToolTip, ahk_id %id%`nahk_class %class%`n%title%`nControl: %control%
+    
+    Sleep 5000
+    ToolTip
+    return
 }
 
 ; TODO ! 

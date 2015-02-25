@@ -70,10 +70,7 @@
 {
 	if( ( GetKeyState("LWin", "P") || GetKeyState("RWin", "P") ) && GetKeyState("n", "P") )
 	{
-        if( ! VSOpenCurrentFileInNotepadPlusPlus() )
-        {
-            ActivateLastNotepadPlusPlus()
-        }
+        ActivateLastNotepadPlusPlus()
     }
     return
 }
@@ -615,6 +612,25 @@ LControlWheelDown()
 }
 
 ;------------------------------
+;	Alt ... f
+;
+; ~Alt & f::
+; {
+	; if( GetKeyState("Alt", "P") && GetKeyState("f", "P") )
+	; {
+        ; if( FindUsingCMD( "asdf.h", "w:", ".h", foundFilePath) == false)
+        ; {
+            ; OutputToDebugWindow("Alt f")
+            ; ; Return usual command
+            ; Send {Alt Down}{f}{Alt Up}
+        ; }
+        ; else 
+            ; Continue( foundFilePath )
+    ; }
+    ; return
+; }
+
+;------------------------------
 ; Alt ... p
 ; Will conflict with VS "Attach to Process", seems like VS take precedence over controls
 ;
@@ -637,6 +653,39 @@ LControlWheelDown()
         ; Send {Alt Down}{p}{Alt Up}
     ; }
 ;}
+
+~Alt & t::
+{
+    if( GetKeyState("Alt", "P") && GetKeyState("t", "P") )
+    {
+        TerminateAll()
+    }
+    return
+}
+
+~Alt & o::
+{
+    if( GetKeyState("Alt", "P") && GetKeyState("o", "P") )
+    {
+        VSSwitchHeaderAndCpp()
+    }
+    return
+}
+
+;------------------------------
+;    Alt ... n
+;
+~Alt & n::
+{
+    if( GetKeyState("Alt", "P") && GetKeyState("n", "P") )
+    {
+        if( ! VSOpenCurrentFileInNotepadPlusPlus() )
+        {
+            ActivateLastNotepadPlusPlus()
+        }
+    }
+    return
+}
 
 ;------------------------------
 ;    Alt ... k

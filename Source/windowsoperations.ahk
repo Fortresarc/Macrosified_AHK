@@ -7,6 +7,21 @@
 ;
 
 ;------------------------------
+; Terminate all my macros that are terminable
+;
+TerminateAll()
+{
+    global TerminateAll
+
+    OutputToDebugWindow("Terminating all macros...")
+    TerminateAll := true
+    ; Sleep 10000
+    ; TerminateAll := false
+    ; OutputToDebugWindow("Terminating Done!")
+    return
+}
+
+;------------------------------
 ; Suspend the script
 ;
 ahkSuspend()

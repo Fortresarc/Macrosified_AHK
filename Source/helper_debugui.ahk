@@ -53,11 +53,16 @@ EnableUI()
 	global sizeX
 	global sizeY
 	global UseLastStoredDebugWindowPos
+    global magnetTop
 	
 	; Get the real screen size
 	WinGetPos,TX,TY,TW,TH,ahk_class Shell_TrayWnd,,,	; This will get me the Taskbar size
 	PosX := A_ScreenWidth * 0.8
-	PosY := A_ScreenHeight - TH - sizeY - MarginY
+	
+    if(magnetTop)
+        PosY := 0
+    else
+        PosY := A_ScreenHeight - TH - sizeY - MarginY
 	
 	; Get the last stored window positon	
 	if( UseLastStoredDebugWindowPos )
@@ -67,11 +72,11 @@ EnableUI()
 	
 	#SingleInstance,Force
 		
-	Gui, +ToolWindow	; Hide the icon on the Windows Taskbar
-						; Decided not to hide because we cannot set text afterward
-                        ; 23 Jan 2015 Decided to hide again cos it seems like text can be sent after all
+	; Gui, +ToolWindow	; Hide the icon on the Windows Taskbar
+						; ; Decided not to hide because we cannot set text afterward
+                        ; ; 23 Jan 2015 Decided to hide again cos it seems like text can be sent after all
 	
-	Gui -Caption
+	; Gui -Caption
 	Gui, font, %TextColor% Italic s7, TextFont	;Must be before setting text
 	Gui, Color, %BGColor%
 	Gui, margin, MarginX, MarginY
@@ -80,7 +85,15 @@ EnableUI()
 	Gui 2:+LabelMYDEBUGGUI 	; TODO: This is not used!
 	Gui, Show, w%sizeX% h%sizeY% x%PosX% y%PosY%, %DebugWindowTitle%
 
-	WinSet, TransColor, %BGColor%
+    makeTransparent := true
+    if( makeTransparent )
+    {
+        Gui -Caption +ToolWindow
+        IfWinExist %DebugWindowTitle%
+            WinSet, Transparent, 150
+    }
+    
+	Gui, Show, w%sizeX% h%sizeY% x%PosX% y%PosY%, %DebugWindowTitle%
 	return
 }
 
@@ -131,6 +144,7 @@ RemoveDebugFromGUI:
 DragDebugWindow( controlKey )
 {
 	global DebugWindowTitle
+    global magnetTop
 	wasDragged := false
 		
 	while ( CheckWindowActive( DebugWindowTitle ) && GetKeyState( controlKey, "P") )
@@ -149,7 +163,10 @@ DragDebugWindow( controlKey )
 	; Released
 	if( wasDragged )
 	{
-		MagnetToWindowBarHeight()
+		if(magnetTop)
+            MagnetToTop()
+        else
+            MagnetToWindowBarHeight()
 		
 		;Otherwise, track the mouse as the user drags it
 		;SetTimer, WatchMouse, 10
@@ -170,6 +187,19 @@ MagnetToWindowBarHeight()
 	MouseGetPos, currX, currY
 	
 	currY := A_ScreenHeight - TH - sizeY - MarginY
+	WinMove, %DebugWindowTitle%,, %currX%, %currY%, %sizeX%, %sizeY%*2
+}
+
+MagnetToTop()
+{
+	global DebugWindowTitle
+	global sizeX
+	global sizeY
+	global MarginY
+	WinGetPos,TX,TY,TW,TH,ahk_class Shell_TrayWnd,,,	; This will get me the Taskbar size
+	MouseGetPos, currX, currY
+	
+	currY := 0
 	WinMove, %DebugWindowTitle%,, %currX%, %currY%, %sizeX%, %sizeY%*2
 }
 

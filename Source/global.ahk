@@ -23,6 +23,7 @@ Init()
     Init_VS()
     
     global DebugDuration                := 1000
+    global trackDuration                := 1500
     
 	; Scroll speeds of various programs
 	global VisualStudio_ScrollRate := 10
@@ -30,6 +31,9 @@ Init()
 	global GoogleChrome_ScrollDownRate := 10
 	global Notepad_ScrollRate := 10
 	
+    ; Terminate all
+    global TerminateAll                 := false
+    
 	return
 }
 
@@ -46,8 +50,12 @@ Init_DebugWindowSettings()
 	global TextFont 					:= "Arial"		;Text must be in ""
 	global TextColor 					:= "cGray"
 	global BGColor						:= "E8E8FF"
-	global sizeX						:= 121
+	global sizeX						:= 421
 	global sizeY						:= 15
+    global offsetFromMouse              := 5
+    
+    ; Magnet to top or bottom
+    global magnetTop                    := true
 }
 
 Init_CommonVariables()
@@ -86,8 +94,8 @@ Init_VS()
     global VS_SearchField := "0x61510"
     
     ; Constant defines
-    global VS_CurrentText := "current"
-    global VS_EntireText := "entire"
+    global VS_Current := "current"
+    global VS_Entire := "entire"
     global VS_EntireSolutionText := "Entire Solution"
     global VS_CurrentDocumentText := "Current Document"
 }
