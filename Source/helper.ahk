@@ -54,19 +54,40 @@ SendTextImmediately( text )
     originalCopiedText := clipboard
     OutputToDebugWindow( originalCopiedText )
     
-    ClipWait, 2  ; Wait for the clipboard to contain text.
 	clipboard := text
 	Sleep 50
     SendInput {Ctrl Down}{v}{Ctrl Up}
     Sleep 300
     
-    ClipWait, 2
+    ;ClipWait, 2        ; Wait for the clipboard to contain text.
     clipboard := originalCopiedText
 }
 
-;------------------------------
+;--------------------------------------------------------------------------------------------------
 ;	Open Programs
 ;
+
+;------------------------------
+; Search Google the selected text 
+;
+SearchGoogle()
+{
+    ; The below get selected works! but ONLY for notepad
+    ; WinGet, active_id, ID, A        ; Both works
+    ; ;active_id := WinExist("A")     ;Both works    
+    ; ControlGet, outSelected, Selected, , , ahk_id %active_id%
+    Copy()
+    
+    ActivateLastGoogleChrome()
+    
+    Sleep 100
+    Send {Ctrl Down}{t}{Ctrl Up}
+    Sleep 100
+    
+    SendTextImmediately( clipboard )
+    Send {Enter}
+}
+
 OpenNotepadPlusPlus(fileToOpen="")
 {
     global NotepadPlusPlusTitle
@@ -84,7 +105,7 @@ OpenNotepadPlusPlus(fileToOpen="")
 	return
 }
 
-;------------------------------
+;--------------------------------------------------------------------------------------------------
 ;	Illegal Characters
 ;
 ReplaceIllegalChar(inputMessage)
@@ -100,9 +121,50 @@ ReplaceIllegalChar(inputMessage)
 	return outputMessage
 }
 
-;------------------------------
+;--------------------------------------------------------------------------------------------------
 ;	Windows status
 ;
+;------------------------------
+; Get the ControlIds Of Active applications
+;
+GetControlListOfActive()
+{
+    global NotepadPlusPlus_FollowCurrentBoxTitle := "Follow current doc`."
+    
+    WinGet, ActiveControlList, ControlList, A
+    Loop, Parse, ActiveControlList, `n
+    {
+        ControlGetText, currentControlId, %A_LoopField%, A
+        ; MsgBox, 4,, Control #%a_index% is "%A_LoopField%" "%currentControlId%". Continue?
+                ; IfMsgBox, No
+                    ; break
+        if(currentControlId == NotepadPlusPlus_FollowCurrentBoxTitle)
+        {
+            Continue("found")
+        }
+    }
+
+}
+
+;------------------------------
+; Get the ControlIds from text of Windows individual controls
+;
+GetControlIdFromText( text, ByRef outControlId )
+{
+    WinGet, ActiveControlList, ControlList, A
+    Loop, Parse, ActiveControlList, `n
+    {
+        ControlGetText, currentControlId, %A_LoopField%, A
+        
+        if(currentControlId == text)
+        {
+            outControlId := A_LoopField
+            return true
+        }
+    }
+    return false
+}
+
 CheckWindowExist(Title)
 {
 	SetTitleMatchMode 2
@@ -178,7 +240,7 @@ GetTitle_LastWindowMinimized()
 	return
 }
 
-;------------------------------
+;--------------------------------------------------------------------------------------------------
 ;	Tooltips
 ;
 TimedToolTip(displayMessage, duration=5000)
@@ -203,7 +265,7 @@ RemoveToolTip:
 	return
 }
 
-;------------------------------
+;--------------------------------------------------------------------------------------------------
 ;	Arrays
 ;
 CreateIllegalStringArray()
@@ -234,8 +296,7 @@ GetIllegalStringArraySize()
 	return 13
 }
 
-
-;------------------------------
+;--------------------------------------------------------------------------------------------------
 ;	Windows copy/ paste
 ;
 ; NOTE : We assume the user will call return for this

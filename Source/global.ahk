@@ -72,12 +72,18 @@ Init_NotepadPlusPlus()
 {
     ; Buttons
     global NotepadPlusPlus_FindInFilesTitle := "Find in Files"
-    global NotepadPlusPlus_FollowCurrentBox := "Button2"
-    global NotepadPlusPlus_InAllSubFoldersBox := "Button3"
-    global NotepadPlusPlus_MatchWholeWordBox := "Button11"
-    global NotepadPlusPlus_MatchCaseBox := "Button12"
-    global NotepadPlusPlus_SearchField := "Edit1"
-    global NotepadPlusPlus_ReplaceField := "Edit2"
+    global NotepadPlusPlus_FollowCurrentBox := "Button2"        ;Will be overwritten by sync
+    global NotepadPlusPlus_InAllSubFoldersBox := "Button3"      ;Will be overwritten by sync  
+    global NotepadPlusPlus_MatchWholeWordBox := "Button11"      ;Will be overwritten by sync
+    global NotepadPlusPlus_MatchCaseBox := "Button12"           ;Will be overwritten by sync
+    global NotepadPlusPlus_SearchField := "Edit1"               ;Will be overwritten by sync
+    global NotepadPlusPlus_ReplaceField := "Edit2"              ;Will be overwritten by sync
+    global NotepadPlusPlus_FollowCurrentBoxTitle := "Follow current doc`."
+    global NotepadPlusPlus_InAllSubFoldersBoxTitle := "In all su`&b`-folders"
+    global NotepadPlusPlus_MatchWholeWordBoxTitle := "Match `&whole word"
+    global NotepadPlusPlus_MatchCaseBoxTitle := "Match \&case"
+    global NotepadPlusPlus_SearchFieldTitle := "`&Find what"
+    global NotepadPlusPlus_ReplaceFieldTitle := "Rep`&lace what"
     
     ; Constant defines
     global NotepadPlusPlus_CurrentText := "current"

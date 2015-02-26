@@ -4,6 +4,39 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;------------------------------
+;	Visual Studio NameOfCurrentFile is sent to clipboard
+;
+VSCopyNameOfCurrentFile()
+{
+    if( VSGetNameOfCurrentFile(out) )
+    {
+        clipboard := out
+        return true
+    }
+    return false
+}
+
+;------------------------------
+;	Visual Studio Gets NameOfCurrentFile "asdf.cpp"
+;
+VSGetNameOfCurrentFile( ByRef outTitle )
+{
+    global VisualStudioTitle
+    if ( CheckWindowActive( VisualStudioTitle ) )
+	{
+        filePath := VSCopyFullPath()
+        
+        properFilePath := ReplaceIllegalChar(filePath)
+        SplitPath, properFilePath, name, dir, ext, name_no_ext, drive
+        outTitle := name
+        
+        OutputToDebugWindow( "Filename: "outTitle )
+        return true
+    }
+    return false
+}
+
+;------------------------------
 ;	Visual Studio switch between header and cpp files
 ;
 VSSwitchHeaderAndCpp()
@@ -43,7 +76,6 @@ VSSwitchHeaderAndCpp()
         }
         else
         {
-            
             properFilePath := ReplaceIllegalChar(switchedFilePath)
             SplitPath, properFilePath, name, dir, ext, name_no_ext, drive
             
@@ -249,10 +281,69 @@ Reverse()
 }
 
 ;------------------------------
+;	Notepad++ Synchronise all the Control ids everytime since it changes all the time
+;
+SyncControlIdsOfNotepadPlusPlus()
+{
+    global NotepadPlusPlus_FollowCurrentBox
+    global NotepadPlusPlus_InAllSubFoldersBox
+    global NotepadPlusPlus_SearchField
+    global NotepadPlusPlus_ReplaceField
+    global NotepadPlusPlus_MatchWholeWordBox
+    global NotepadPlusPlus_MatchCaseBox
+    
+    global NotepadPlusPlus_FollowCurrentBoxTitle 
+    global NotepadPlusPlus_InAllSubFoldersBoxTitle 
+    global NotepadPlusPlus_SearchFieldTitle 
+    global NotepadPlusPlus_ReplaceFieldTitle
+    global NotepadPlusPlus_MatchWholeWordBoxTitle 
+    global NotepadPlusPlus_MatchCaseBoxTitle 
+    
+    
+    if( GetControlIdFromText(NotepadPlusPlus_FollowCurrentBoxTitle, NotepadPlusPlus_FollowCurrentBox ) 
+    && GetControlIdFromText(NotepadPlusPlus_InAllSubFoldersBoxTitle, NotepadPlusPlus_InAllSubFoldersBox)
+    && GetControlIdFromText(NotepadPlusPlus_SearchFieldTitle, NotepadPlusPlus_SearchField)
+    && GetControlIdFromText(NotepadPlusPlus_ReplaceFieldTitle, NotepadPlusPlus_ReplaceField)
+    && GetControlIdFromText(NotepadPlusPlus_MatchWholeWordBoxTitle, NotepadPlusPlus_MatchWholeWordBox)
+    && GetControlIdFromText(NotepadPlusPlus_MatchCaseBoxTitle, NotepadPlusPlus_MatchCaseBox))
+    {
+        return true
+    }
+    return false
+}
+
+;------------------------------
+;	Find all Notepad++ Slow (Unused)
+;
+NotepadPlusPlus_FindAll_Slow( where )
+{
+    ; send focus back to "Follow current doc." directory
+    ; NOTE: If already selected it will still work
+    Loop 5
+    {
+        Sleep 50
+        Send {Tab}
+    }
+    
+    ; Check follow current    
+    Send, {Space}
+    
+    ; Check sub folders 
+    ; NOTE: If already selected it MAY NOT work
+    Send, {Tab}
+    Send, {Space}
+    
+    ; Send focus to search field
+    Send, {f}
+    
+    return true
+}
+
+;------------------------------
 ;	Find all Notepad++
 ;
 NotepadPlusPlus_FindAll( where )
-{
+{   
     global NotepadPlusPlus_FindInFilesTitle
     global NotepadPlusPlus_FollowCurrentBox
     global NotepadPlusPlus_InAllSubFoldersBox
@@ -260,33 +351,39 @@ NotepadPlusPlus_FindAll( where )
     global NotepadPlusPlus_ReplaceField
     global NotepadPlusPlus_MatchWholeWordBox
     global NotepadPlusPlus_MatchCaseBox
+    global NotepadPlusPlus_EntireText
+    global NotepadPlusPlus_CurrentText
+
+    SyncControlIdsOfNotepadPlusPlus()
 
     ; Refreshes the whole Search UI
-    Control, Show, , , %NotepadPlusPlus_FindInFilesTitle% 
+    Control, Hide, , , , %NotepadPlusPlus_FindInFilesTitle% 
+    Control, Show, , , , %NotepadPlusPlus_FindInFilesTitle% 
     
     if ( where == NotepadPlusPlus_EntireText )
     {
-        ; Search in current dir
-        ;ControlGet, checked, Checked , , %NotepadPlusPlus_FollowCurrentBox%, %NotepadPlusPlus_FindInFilesTitle%
-        Control, Check, , %NotepadPlusPlus_FollowCurrentBox%, %NotepadPlusPlus_FindInFilesTitle%
-    
-        ; Search recursively
-        Control, Check, , %NotepadPlusPlus_InAllSubFoldersBox%, %NotepadPlusPlus_FindInFilesTitle%
+        ; Match whole word
+        Control, UnCheck, , %NotepadPlusPlus_MatchWholeWordBox%, %NotepadPlusPlus_FindInFilesTitle%
+        
+        ; Match case
+        Control, UnCheck, , %NotepadPlusPlus_MatchCaseBox%, %NotepadPlusPlus_FindInFilesTitle%
     }
     else if ( where == NotepadPlusPlus_CurrentText )
     {
-        ; Search in current dir
-        Control, Uncheck, , %NotepadPlusPlus_FollowCurrentBox%, %NotepadPlusPlus_FindInFilesTitle%
+        ; Match whole word
+        Control, Check, , %NotepadPlusPlus_MatchWholeWordBox%, %NotepadPlusPlus_FindInFilesTitle%
         
-        ; Search recursively
-        Control, Uncheck, , %NotepadPlusPlus_InAllSubFoldersBox%, %NotepadPlusPlus_FindInFilesTitle%
+        ; Match case
+        Control, Check, , %NotepadPlusPlus_MatchCaseBox%, %NotepadPlusPlus_FindInFilesTitle%
     }
     
-    ; Match whole word
-    Control, Check, , %NotepadPlusPlus_MatchWholeWordBox%, %NotepadPlusPlus_FindInFilesTitle%
+    ; Search in current dir
+    ;ControlGet, checked, Checked , , %NotepadPlusPlus_FollowCurrentBox%, %NotepadPlusPlus_FindInFilesTitle%    
+    Control, Check, , %NotepadPlusPlus_FollowCurrentBox%, %NotepadPlusPlus_FindInFilesTitle%
     
-    ; Match case
-    Control, Check, , %NotepadPlusPlus_MatchCaseBox%, %NotepadPlusPlus_FindInFilesTitle%        
+    ; Search recursively
+    Control, Check, , %NotepadPlusPlus_InAllSubFoldersBox%, %NotepadPlusPlus_FindInFilesTitle%
+    
     
     ; Focus search field
     Control, Show, , %NotepadPlusPlus_SearchField%, %NotepadPlusPlus_FindInFilesTitle%
@@ -295,7 +392,7 @@ NotepadPlusPlus_FindAll( where )
     ControlSetText, %NotepadPlusPlus_ReplaceField%, , %NotepadPlusPlus_FindInFilesTitle%   
         
     ; Refreshes the whole Search UI
-    Control, Show, , , %NotepadPlusPlus_FindInFilesTitle% 
+    Control, Show, , , %NotepadPlusPlus_FindInFilesTitle%     
 }
 
 ;------------------------------
@@ -392,13 +489,14 @@ VS_FindAll( where, searchWindowTitle )
     Control, Show, , , %searchWindowTitle% 
 }
 ;------------------------------
-;	Find all occurrences in Entire document
+;	Find all VS in Entire document
 ;
 VSFindAll_Entire()
 {
 	global VisualStudioTitle
     global NotepadPlusPlusTitle
     global NotepadPlusPlus_EntireText
+    global NotepadPlusPlus_FindInFilesTitle
     global VS_Entire
     
 	if ( CheckWindowActive( VisualStudioTitle ) )
@@ -411,13 +509,17 @@ VSFindAll_Entire()
         
 		return true
 	}
-    else if (CheckWindowActive( NotepadPlusPlusTitle )) 
+    else if (CheckWindowActive( NotepadPlusPlusTitle ) ||  CheckWindowActive( NotepadPlusPlus_FindInFilesTitle )) 
     {
 		OutputToDebugWindow("Find all `(Entire`) Notepad++")
+        if( CheckWindowActive( NotepadPlusPlus_FindInFilesTitle ) )
+            WinClose, %NotepadPlusPlus_FindInFilesTitle%
+
 		Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
 		Sleep 10
         
         NotepadPlusPlus_FindAll( NotepadPlusPlus_EntireText )
+        ;NotepadPlusPlus_FindAll_Slow( NotepadPlusPlus_CurrentText )
         
         return true
     }
@@ -426,12 +528,13 @@ VSFindAll_Entire()
 }
 
 ;------------------------------
-;	Find all occurrences in Current document
+;	Find all VS in Current document
 ;
 VSFindAll_Current()
 {
 	global VisualStudioTitle
     global NotepadPlusPlusTitle
+    global NotepadPlusPlus_FindInFilesTitle
     global NotepadPlusPlus_CurrentText
     global VS_Current
     
@@ -445,13 +548,17 @@ VSFindAll_Current()
         
 		return true
 	}
-    else if (CheckWindowActive( NotepadPlusPlusTitle )) 
+    else if (CheckWindowActive( NotepadPlusPlusTitle ) ||  CheckWindowActive( NotepadPlusPlus_FindInFilesTitle )) 
     {
 		OutputToDebugWindow("Find all `(Current`) Notepad++")
+        if( CheckWindowActive( NotepadPlusPlus_FindInFilesTitle ) )
+            WinClose, %NotepadPlusPlus_FindInFilesTitle%
+        		
 		Send, {Ctrl Down}{Shift Down}{f}{Ctrl Up}{Shift Up}
 		Sleep 10
         
         NotepadPlusPlus_FindAll( NotepadPlusPlus_CurrentText )
+        ;NotepadPlusPlus_FindAll_Slow( NotepadPlusPlus_CurrentText )
         
         return true
     }

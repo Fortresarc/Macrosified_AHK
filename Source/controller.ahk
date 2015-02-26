@@ -774,4 +774,36 @@ LControlWheelDown()
     return
 }
 
+;======================================================================================================================
+;	Keyboard controls
+;	
 
+;------------------------------
+;	F1
+;
+F1::
+{
+	if( GetKeyState("F1", "P") )
+	{
+        SearchGoogle()
+    }
+    return
+}
+
+;------------------------------
+;	F2
+;
+F2::
+{
+	if( GetKeyState("F2", "P") )
+	{
+        if( !VSCopyNameOfCurrentFile() )
+        {
+            OutputToDebugWindow("F2")
+            
+            ; Like SendInput, SendPlay's keystrokes do not get interspersed with keystrokes typed by the user. Thus, if the user happens to type something during a SendPlay, those keystrokes are postponed until afterward.
+            SendPlay {F2}
+        }
+    }
+    return
+}
