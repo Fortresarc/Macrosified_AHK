@@ -469,7 +469,13 @@ OpenCurrentSelectedWithNotepadPlusPlus()
 {
     allSelectedFilePath := GetFileSelected_Explorer() 
     replacedIllegalPath := ReplaceIllegalChar(allSelectedFilePath)
-    OpenNotepadPlusPlus( replacedIllegalPath )
+    
+    ; TODO :    There is a possibility an "0x80004005 - Unspecified Error" may appear, this hasn't been solved yet
+    ;           However when it happens again, program will be able to continue
+    if( replaceIllegalPath != "Unspecified Error" ) 
+        OpenNotepadPlusPlus( replacedIllegalPath )
+    else 
+        Continue("Unspecified Error")
 }
 
 CopyFilePathAtSelectedFolder()
@@ -479,18 +485,35 @@ CopyFilePathAtSelectedFolder()
     ; Copies to clipboard
     replacedIllegalPath := ReplaceIllegalChar(allSelectedFilePath)
     OutputToDebugWindow( replacedIllegalPath )
-    Clipboard := replacedIllegalPath
+    
+    ; TODO :    There is a possibility an "0x80004005 - Unspecified Error" may appear, this hasn't been solved yet
+    ;           However when it happens again, program will be able to continue
+    if( replaceIllegalPath != "Unspecified Error" ) 
+        Clipboard := replacedIllegalPath
+    else 
+        Continue("Unspecified Error")
 }
 
-GetFileSelected_Explorer(hwnd="") {
+GetFileSelected_Explorer(hwnd="") 
+{
 	hwnd := hwnd ? hwnd : WinExist("A")
+    
 	WinGetClass class, ahk_id %hwnd%
 	if (class="CabinetWClass" or class="ExploreWClass" or class="Progman")
 		for window in ComObjCreate("Shell.Application").Windows
+        {
+            ; TODO :    There is a possibility an "0x80004005 - Unspecified Error" may appear, this hasn't been solved yet
+            ;           However when it happens again, program will be able to continue
+            if(window == 0x80004005)
+                return "Unspecified Error"
+            
 			if (window.hwnd==hwnd)
-    sel := window.Document.SelectedItems
+            {
+                sel := window.Document.SelectedItems
+            }
+        }
 	for item in sel
-	ToReturn .= item.path "`n"
+        ToReturn .= item.path "`n"
 	return Trim(ToReturn,"`n")
 }
 
