@@ -55,7 +55,7 @@ Init_DebugWindowSettings()
     global offsetFromMouse              := 5
     
     ; Magnet to top or bottom
-    global magnetTop                    := true
+    global magnetTop                    := false
 }
 
 Init_CommonVariables()

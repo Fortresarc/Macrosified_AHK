@@ -103,7 +103,7 @@ VSSwitchHeaderAndCpp()
             }
             else
             {
-                OutputToDebugWindow("Cannot find in "fileDrive)
+                OutputToDebugWindow("Cannot find in "drive)
             }
         }
     }

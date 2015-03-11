@@ -175,7 +175,7 @@
 			OutputToDebugWindow( "Ctrl LButton" )
 			
 			; not used so default to Windows select multiple files
-			Send {Ctrl Down}{LButton}{Ctrl Up}
+			SendInput {Ctrl Down}{LButton}{Ctrl Up}
 		}
 	}
 	return
@@ -318,7 +318,7 @@ LControlWheelDown()
         else
         {
             OutputToDebugWindow("Control c")
-            Send {Ctrl Down}{c}{Ctrl Up}
+            SendInput {Ctrl Down}{c}{Ctrl Up}
         }
     }
     return
