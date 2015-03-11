@@ -415,9 +415,13 @@ VS_FindAll_Slow(where)
     {
         SendTextImmediately( VS_EntireSolutionText )
     }
-    else
+    else if( where == VS_Current ) 
     {
         SendTextImmediately( VS_CurrentDocumentText )
+    }
+    else
+    {
+        SendTextImmediately( where )
     }
     ; send focus back to search field
     Send {Shift Down}{Tab}{Shift Up}

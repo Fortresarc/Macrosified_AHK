@@ -593,16 +593,16 @@ LControlWheelDown()
 {
 	if( GetKeyState("Alt", "P") && GetKeyState("e", "P") )
 	{
-        if( VSFindAll_Entire() == false)
+        If IsFunc("AltE") 
         {
-            If IsFunc("AltE") 
+            funcName = AltE
+            if ( %funcName%() == true)
             {
-                funcName = AltE
-                if ( %funcName%() == true)
-                {
-                    return
-                }
+                return
             }
+        }
+        else if( VSFindAll_Entire() == false)
+        {
             OutputToDebugWindow("Alt e")
             ; Return usual command
             Send {Alt Down}{e}{Alt Up}
