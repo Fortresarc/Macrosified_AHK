@@ -200,6 +200,7 @@ Forward()
     global GoogleChromeTitle
     global NotepadPlusPlusTitle
     global SmartGitTitle
+    global WinMergeTitle 
     
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
@@ -231,6 +232,12 @@ Forward()
         Send {F6}
         return true
     }
+    else if ( CheckWindowActive( WinMergeTitle ) )
+    {
+        OutputToDebugWindow("Next Diff(WinMerge)")
+        Send {Alt Down}{Down Down}{Alt Up}{Down Up}
+        return true
+    }
     
 	return false
 }
@@ -245,6 +252,7 @@ Reverse()
     global GoogleChromeTitle
     global NotepadPlusPlusTitle
     global SmartGitTitle
+    global WinMergeTitle 
     
 	if ( CheckWindowActive( VisualStudioTitle ) )
 	{
@@ -274,6 +282,12 @@ Reverse()
     {
         OutputToDebugWindow("Prev Diff(SmartGit)")
         Send {Shift Down}{F6}{Shift Up}
+        return true
+    }
+    else if ( CheckWindowActive( WinMergeTitle ) )
+    {
+        OutputToDebugWindow("Prev Diff(WinMerge)")
+        Send {Alt Down}{Up Down}{Alt Up}{Up Up}
         return true
     }
     
